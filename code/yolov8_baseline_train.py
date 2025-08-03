@@ -4,11 +4,10 @@ import yaml
 import os
 
 
-
 # define paths
 dataset_dir = '../data/yolo_dataset'
 data_yaml_path = os.path.join(dataset_dir, 'data.yaml')
-model_save_path = 'saved_models/yolov8_epoch_5.pt'
+model_save_path = 'saved_models/yolov8_best.pt'
 
 os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
 
@@ -19,7 +18,7 @@ model = YOLO('yolov8n.pt')
 
 model.train(
     data = data_yaml_path, 
-    epochs = 5, 
+    epochs = 50, 
     imgsz = 640, 
     batch = 16
 )
