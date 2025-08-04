@@ -5,12 +5,11 @@ import os
 
 
 # define paths
-dataset_dir = '../data/yolo_dataset'
+dataset_dir = '../yolo_dataset'
 data_yaml_path = os.path.join(dataset_dir, 'data.yaml')
-model_save_path = 'saved_models/yolov11_best.pt'
+model_save_path = '../results/saved_models/yolov11_best.pt'
 
 os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
-
 
 
 # train YOLOv11

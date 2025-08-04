@@ -5,12 +5,11 @@ import os
 
 
 # define paths
-dataset_dir = '../data/yolo_dataset'
+dataset_dir = '../yolo_dataset'
 data_yaml_path = os.path.join(dataset_dir, 'data.yaml')
-model_save_path = 'saved_models/yolov8_best.pt'
+model_save_path = '../results/saved_models/yolov8_best.pt'
 
 os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
-
 
 
 # train YOLOv8
@@ -20,7 +19,8 @@ results = model.train(
     data = data_yaml_path, 
     epochs = 50, 
     imgsz = 640, 
-    batch = 16
+    batch = 16, 
+    amp = False
 )
 
 trained_model_path = os.path.join(results.save_dir, 'weights', 'best.pt')
