@@ -16,14 +16,15 @@ os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
 # train YOLOv8
 model = YOLO('yolov8n.pt')
 
-model.train(
+results = model.train(
     data = data_yaml_path, 
     epochs = 50, 
     imgsz = 640, 
     batch = 16
 )
 
-trained_model_path = 'runs/detect/train/weights/best.pt'
+trained_model_path = os.path.join(results.save_dir, 'weights', 'best.pt')
+
 if os.path.exists(trained_model_path):
     os.system(f'cp {trained_model_path} {model_save_path}')
     print(f"Model saved to {model_save_path}")
