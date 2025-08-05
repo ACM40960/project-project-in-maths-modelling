@@ -653,6 +653,13 @@ class OCCAPCCChannelAttention(nn.Module):
             # Global average pooling across spatial dimensions
             y = x.mean(dim=[2,3], keepdim=True)  # shape: (B, C, 1, 1)
 
+
+        ####################################
+        # AMP compatibility: ensure input tensor matches the dtype of fc weights
+        y = y.to(self.fc[0].weight.dtype)
+        ####################################
+
+
         # Generate channel attention weights (using the fc excitation module)
         weights = self.fc(y)  # shape: (B, C, 1, 1)
         # Apply channel attention weights
