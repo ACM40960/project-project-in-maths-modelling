@@ -19,8 +19,7 @@ results = model.train(
     data = data_yaml_path, 
     epochs = 50, 
     imgsz = 640, 
-    batch = 16, 
-    amp = False
+    batch = 16
 )
 
 trained_model_path = os.path.join(results.save_dir, 'weights', 'best.pt')

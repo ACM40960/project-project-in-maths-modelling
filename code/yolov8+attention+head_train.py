@@ -5,7 +5,7 @@ import os
 # define paths
 dataset_dir = '../yolo_dataset'
 data_yaml_path = os.path.join(dataset_dir, 'data.yaml')
-custom_yaml_path = 'ultralytics_head/yolov8_EfficientHead3dbb.yaml'
+custom_yaml_path = 'ultralytics_head/yolov8n_EfficientHead3dbb.yaml'
 model_save_path = '../results/saved_models/yolov8+attention+head_best.pt'
 
 os.makedirs(os.path.dirname(model_save_path), exist_ok=True)

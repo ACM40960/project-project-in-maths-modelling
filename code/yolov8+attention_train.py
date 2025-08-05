@@ -16,7 +16,7 @@ model = YOLO(custom_yaml_path)
 
 results = model.train(
     data=data_yaml_path,
-    epochs=1,
+    epochs=50, 
     imgsz=640,
     batch=16
 )
