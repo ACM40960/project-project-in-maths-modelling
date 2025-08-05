@@ -90,7 +90,9 @@ class BaseTrainer:
         init_seeds(self.args.seed + 1 + RANK, deterministic=self.args.deterministic)
 
         # Dirs
-        project = self.args.project or Path(SETTINGS['runs_dir']) / self.args.task
+        # project = self.args.project or Path(SETTINGS['runs_dir']) / self.args.task
+        project = self.args.project or Path('runs') / self.args.task
+
         name = self.args.name or f'{self.args.mode}'
         if hasattr(self.args, 'save_dir'):
             self.save_dir = Path(self.args.save_dir)
@@ -375,8 +377,8 @@ class BaseTrainer:
 
                 self.run_callbacks('on_train_batch_end')
                 
-            if hasattr(de_parallel(self.model).criterion.bce, 'iou_mean'):
-                de_parallel(self.model).criterion.bce.is_train = False
+            # if hasattr(de_parallel(self.model).criterion.bce, 'iou_mean'):
+            #     de_parallel(self.model).criterion.bce.is_train = False
             
             self.lr = {f'lr/pg{ir}': x['lr'] for ir, x in enumerate(self.optimizer.param_groups)}  # for loggers
 
