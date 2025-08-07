@@ -2,43 +2,7 @@
 # Ultralytics YOLOv8n model with OCC+APCC attention after SPPF
 # Inserted after backbone SPPF, before neck
 
-# Parameters
-# nc: 17  # number of classes
-# depth_multiple: 0.33
-# width_multiple: 0.25
 
-# # Backbone + OCC + Neck
-# backbone:
-#   [
-#     [-1, 1, Conv, [16, 3, 2]],         # 0-P1/2
-#     [-1, 1, Conv, [32, 3, 2]],         # 1-P2/4
-#     [-1, 1, C2f, [32, True]],          # 2
-#     [-1, 1, Conv, [64, 3, 2]],         # 3-P3/8
-#     [-1, 2, C2f, [64, True]],          # 4
-#     [-1, 1, Conv, [128, 3, 2]],        # 5-P4/16
-#     [-1, 2, C2f, [128, True]],         # 6
-#     [-1, 1, Conv, [256, 3, 2]],        # 7-P5/32
-#     [-1, 1, C2f, [256, True]],         # 8
-#     [-1, 1, SPPF, [256]],              # 9
-#     [-1, 1, OCCAPCCChannelAttention, []],  # 10 - insert OCC+APCC module
-#     [-1, 1, nn.Upsample, [None, 2, 'nearest']],     # 11
-#     [[-1, 6], 1, Concat, [1]],                   # 12
-#     [-1, 1, C2f, [128]],                         # 13
-#     [-1, 1, nn.Upsample, [None, 2, 'nearest']],     # 14
-#     [[-1, 4], 1, Concat, [1]],                   # 15
-#     [-1, 1, C2f, [64]],                          # 16
-#     [-1, 1, Conv, [64, 3, 2]],                   # 17
-#     [[-1, 13], 1, Concat, [1]],                  # 18
-#     [-1, 1, C2f, [128]],                         # 19
-#     [-1, 1, Conv, [128, 3, 2]],                  # 20
-#     [[-1, 8], 1, Concat, [1]],                   # 21
-#     [-1, 1, C2f, [256]],                         # 22
-#   ]
-
-# head:
-#   [
-#     [[16, 19, 22], 1, Detect, [nc]]             # 23 output
-#   ]
 # Parameters
 nc: 17  # number of classes
 scales: # model compound scaling constants, i.e. 'model=yolov8n.yaml' will call yolov8.yaml with scale 'n'
