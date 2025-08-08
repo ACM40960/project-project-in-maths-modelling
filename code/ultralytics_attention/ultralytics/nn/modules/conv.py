@@ -568,47 +568,6 @@ class RepConv(nn.Module):
         if hasattr(self, "id_tensor"):
             self.__delattr__("id_tensor")
 
-
-class ChannelAttention(nn.Module):
-    """
-    Channel-attention module for feature recalibration.
-
-    Applies attention weights to channels based on global average pooling.
-
-    Attributes:
-        pool (nn.AdaptiveAvgPool2d): Global average pooling.
-        fc (nn.Conv2d): Fully connected layer implemented as 1x1 convolution.
-        act (nn.Sigmoid): Sigmoid activation for attention weights.
-
-    References:
-        https://github.com/open-mmlab/mmdetection/tree/v3.0.0rc1/configs/rtmdet
-    """
-
-    def __init__(self, channels: int) -> None:
-        """
-        Initialize Channel-attention module.
-
-        Args:
-            channels (int): Number of input channels.
-        """
-        super().__init__()
-        self.pool = nn.AdaptiveAvgPool2d(1)
-        self.fc = nn.Conv2d(channels, channels, 1, 1, 0, bias=True)
-        self.act = nn.Sigmoid()
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
-        Apply channel attention to input tensor.
-
-        Args:
-            x (torch.Tensor): Input tensor.
-
-        Returns:
-            (torch.Tensor): Channel-attended output tensor.
-        """
-        return x * self.act(self.fc(self.pool(x)))
-
-
 class OCCAPCCChannelAttention(nn.Module):
     """
     Implementation of OCC + APCC channel attention module from YOLOv8-night paper.
@@ -664,8 +623,48 @@ class OCCAPCCChannelAttention(nn.Module):
         # Generate channel attention weights (using the fc excitation module)
         weights = self.fc(y)  # shape: (B, C, 1, 1)
         # Apply channel attention weights
-        return x * weights
+        # return x * weights
+        return x + x * weights   # residual connection
 
+
+class ChannelAttention(nn.Module):
+    """
+    Channel-attention module for feature recalibration.
+
+    Applies attention weights to channels based on global average pooling.
+
+    Attributes:
+        pool (nn.AdaptiveAvgPool2d): Global average pooling.
+        fc (nn.Conv2d): Fully connected layer implemented as 1x1 convolution.
+        act (nn.Sigmoid): Sigmoid activation for attention weights.
+
+    References:
+        https://github.com/open-mmlab/mmdetection/tree/v3.0.0rc1/configs/rtmdet
+    """
+
+    def __init__(self, channels: int) -> None:
+        """
+        Initialize Channel-attention module.
+
+        Args:
+            channels (int): Number of input channels.
+        """
+        super().__init__()
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Conv2d(channels, channels, 1, 1, 0, bias=True)
+        self.act = nn.Sigmoid()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Apply channel attention to input tensor.
+
+        Args:
+            x (torch.Tensor): Input tensor.
+
+        Returns:
+            (torch.Tensor): Channel-attended output tensor.
+        """
+        return x * self.act(self.fc(self.pool(x)))
 
 class SpatialAttention(nn.Module):
     """
@@ -686,7 +685,7 @@ class SpatialAttention(nn.Module):
             kernel_size (int): Size of the convolutional kernel (3 or 7).
         """
         super().__init__()
-        assert kernel_size in {3, 7}, "kernel size must be 3 or 7"
+        assert kernel_size in {3, 7}, f"[CBAM DEBUG] Invalid kernel_size={kernel_size}"
         padding = 3 if kernel_size == 7 else 1
         self.cv1 = nn.Conv2d(2, 1, kernel_size, padding=padding, bias=False)
         self.act = nn.Sigmoid()
@@ -723,6 +722,9 @@ class CBAM(nn.Module):
             c1 (int): Number of input channels.
             kernel_size (int): Size of the convolutional kernel for spatial attention.
         """
+        print(f"[CBAM DEBUG] c1 = {c1}")
+        print(f"[CBAM DEBUG] called from layer with c1 = {c1}")
+        
         super().__init__()
         self.channel_attention = ChannelAttention(c1)
         self.spatial_attention = SpatialAttention(kernel_size)
