@@ -3,145 +3,159 @@ import xml.etree.ElementTree as ET
 import shutil
 from sklearn.model_selection import train_test_split
 
-# 原始資料夾
-dir_path = './voc_night'
+# original path
+dir_path = '../voc_night/'
 image_dir = os.path.join(dir_path, 'JPEGImages')
 annot_dir = os.path.join(dir_path, 'Annotations')
-label_dir = os.path.join(dir_path, 'labels')
-os.makedirs(label_dir, exist_ok = True)
+label_dir = os.path.join(dir_path, 'YoloLabels')
+os.makedirs(label_dir, exist_ok=True)
 
-# 新資料夾
-output_dir = './yolo_dataset'
-for split in ['train', 'test']: 
-    os.makedirs(os.path.join(output_dir, "images", split), exist_ok=True)
-    os.makedirs(os.path.join(output_dir, "labels", split), exist_ok=True)
+# output path
+output_dir = '../yolo_dataset'
+for split in ['train', 'valid', 'test']: 
+    os.makedirs(os.path.join(output_dir, 'images', split), exist_ok=True)
+    os.makedirs(os.path.join(output_dir, 'labels', split), exist_ok=True)
 
-# 類別名稱
-classes = [
-    "AmurTiger",
-    "Badger",
-    "BlackBear",
-    "Cow",
-    "Dog",
-    "Hare",
-    "Leopard",
-    "LeopardCat",
-    "MuskDeer",
-    "RaccoonDog",
-    "RedFox",
-    "RoeDeer",
-    "Sable",
-    "SikaDeer",
-    "Weasel",
-    "WildBoar",
-    "Y.T.Marten"
-]
+# get class names
+def get_classes(): 
+    """Collect class names from XML annotations and save to a file."""
 
-# 轉換 xml annotations 成 yolo txt
-for xml_file in os.listdir(annot_dir): 
-    if not xml_file: 
-        continue
+    print("Collecting class names...")
+
+    classes = set()
+
+    for file in os.listdir(annot_dir):
+        if file.endswith('.xml'):
+            tree = ET.parse(os.path.join(annot_dir, file))
+            root = tree.getroot()
+
+            for obj in root.findall('object'):
+                name = obj.find('name').text
+                classes.add(name)
     
-    tree = ET.parse(os.path.join(annot_dir, xml_file))
-    root = tree.getroot()
+    # save class names to a txt file
+    output_path = os.path.join(output_dir, 'classes_names.txt')
+    with open(output_path, 'w') as f: 
+        for cls in sorted(classes): 
+            f.write(cls + '\n')
 
-    filename = root.find('filename').text
-    img_path = os.path.join(image_dir, filename)
-    if not os.path.exists(img_path):
-        print(f"Image not found: {img_path}")
-        continue
+    print(f"Classes saved to {output_path}")
+    return sorted(classes)
 
-    size = root.find('size')
-    w = int(size.find('width').text)
-    h = int(size.find('height').text)
+# convert xml annotations to yolo txt
+def convert_annotations(classes):
+    """Convert XML annotations to YOLO format and save to label directory."""
 
-    yolo_lines = []
-    for obj in root.findall('object'):
-        cls = obj.find('name').text
-        if cls not in classes:
+    print("Converting annotations to YOLO format...")
+
+    for xml_file in os.listdir(annot_dir): 
+        if not xml_file.endswith('.xml'):
             continue
-        cls_id = classes.index(cls)
+        tree = ET.parse(os.path.join(annot_dir, xml_file))
+        root = tree.getroot()
 
-        bbox = obj.find('bndbox')
-        xmin = int(bbox.find('xmin').text)
-        ymin = int(bbox.find('ymin').text)
-        xmax = int(bbox.find('xmax').text)
-        ymax = int(bbox.find('ymax').text)
+        # get image filename and check if it exists
+        filename = root.find('filename').text
+        img_path = os.path.join(image_dir, filename)
+        if not os.path.exists(img_path):
+            print(f"Image not found: {img_path}")
+            continue
+        
+        # get image size
+        size = root.find('size')
+        w = int(size.find('width').text)
+        h = int(size.find('height').text)
 
-        # 轉換為 YOLO 格式
-        x_center = (xmin + xmax) / 2.0 / w
-        y_center = (ymin + ymax) / 2.0 / h
-        width = (xmax - xmin) / w
-        height = (ymax - ymin) / h
+        # convert annotations to YOLO format
+        yolo_lines = []
+        for obj in root.findall('object'):
+            cls = obj.find('name').text
+            if cls not in classes:
+                continue
+            cls_id = classes.index(cls)
 
-        yolo_lines.append(f"{cls_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}")
+            # get bounding box coordinates
+            bbox = obj.find('bndbox')
+            xmin = int(bbox.find('xmin').text)
+            ymin = int(bbox.find('ymin').text)
+            xmax = int(bbox.find('xmax').text)
+            ymax = int(bbox.find('ymax').text)
 
-    # 輸出 .txt 標註檔
-    txt_filename = os.path.splitext(filename)[0] + '.txt'
-    with open(os.path.join(label_dir, txt_filename), 'w') as f:
-        f.write('\n'.join(yolo_lines))
+            # convert to YOLO format
+            x_center = (xmin + xmax) / 2.0 / w
+            y_center = (ymin + ymax) / 2.0 / h
+            width = (xmax - xmin) / w
+            height = (ymax - ymin) / h
 
+            # create YOLO format line
+            yolo_lines.append(f"{cls_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}")
 
-# 分割
-images = []
-labels = []
+        # output .txt annotation file
+        txt_filename = os.path.splitext(filename)[0] + '.txt'
+        with open(os.path.join(label_dir, txt_filename), 'w') as f:
+            f.write('\n'.join(yolo_lines))
 
-for label_file in os.listdir(label_dir):
-    if not label_file.endswith(".txt"):
-        continue
+    print("Annotations converted finished.")
 
-    txt_path = os.path.join(label_dir, label_file)
-    with open(txt_path, 'r') as f:
-        lines = f.readlines()
-
-    if not lines:
-        continue  # 跳過空標籤檔
-
-    class_id = lines[0].strip().split()[0]  # 第一句的 class_id
-    labels.append(class_id)
-
-    img_name = label_file.replace(".txt", ".jpg")
-    images.append(img_name)
-
-# 分層切分訓練與測試
-train_imgs, test_imgs = train_test_split(
-    images, test_size=0.2, stratify=labels, random_state=123
-)
-
-# 複製檔案到對應目錄
+# copy images and labels to respective split directories
 def copy_to_split(image_list, split):
+    """Copy images and labels to the respective split directories."""
+    
     for img_file in image_list:
-        base_name = os.path.splitext(img_file)[0]
-        label_file = base_name + ".txt"
+        name = os.path.splitext(img_file)[0]
+        label_file = name + ".txt"
+        
+        # copy image and label files
+        shutil.copy(os.path.join(image_dir, img_file), os.path.join(output_dir, "images", split, img_file))
+        shutil.copy(os.path.join(label_dir, label_file), os.path.join(output_dir, "labels", split, label_file))
 
-        # 圖片
-        shutil.copy(
-            os.path.join(image_dir, img_file),
-            os.path.join(output_dir, "images", split, img_file)
-        )
-        # 標籤
-        shutil.copy(
-            os.path.join(label_dir, label_file),
-            os.path.join(output_dir, "labels", split, label_file)
-        )
+# split dataset into train, valid, test
+def split_dataset():
+    """Split dataset into train, valid, and test sets."""
 
-# 執行複製
-copy_to_split(train_imgs, "train")
-copy_to_split(test_imgs, "test")
+    print("Splitting dataset into train, valid, and test sets...")
+    
+    images = []
+    labels = []
 
-print('Finish spliting')
+    for label_file in os.listdir(label_dir):
+        if not label_file.endswith(".txt"):
+            continue
 
+        # read label file
+        txt_path = os.path.join(label_dir, label_file)
+        with open(txt_path, 'r') as f:
+            lines = f.readlines()
 
+        if not lines:
+            continue
+            
+        # get class id from the first line
+        first_line = lines[0].strip()
+        class_id = first_line.split()[0]
+        labels.append(class_id)
 
-# 建立 data.yaml
-data_yaml_path = os.path.join(output_dir, "data.yaml")
+        img_name = label_file.replace(".txt", ".jpg")
+        images.append(img_name)
 
-with open(data_yaml_path, "w") as f:
-    f.write("train: images/train\n")
-    f.write("val: images/test\n\n")
-    f.write(f"nc: {len(classes)}\n")
-    f.write("names: [")
-    f.write(", ".join(f"'{cls}'" for cls in classes))
-    f.write("]\n")
+    # split train, valid, test as 70%, 10%, 20%
+    train_imgs, temp_imgs, train_labels, temp_labels = train_test_split(
+        images, labels, test_size=0.3, stratify=labels, random_state=123
+    )
 
-print(f"✅ Generated data.yaml at {data_yaml_path}")
+    valid_imgs, test_imgs, _, _ = train_test_split(
+        temp_imgs, temp_labels, test_size=2/3, stratify=temp_labels, random_state=123
+    )
+
+    # copy images and labels to respective split directories
+    copy_to_split(train_imgs, "train")
+    copy_to_split(valid_imgs, "valid") 
+    copy_to_split(test_imgs, "test")
+
+    print("Dataset split finished.")
+
+if __name__ == '__main__': 
+    all_classes = get_classes()
+    convert_annotations(all_classes)
+    split_dataset()
+    print("All preprocessing steps completed successfully.")
