@@ -87,7 +87,8 @@ class BaseValidator:
 
         self.plots = {}
         self.callbacks = _callbacks or callbacks.get_default_callbacks()
-        self.channels=self.args.channels
+        # self.channels=self.args.channels
+        self.channels = 3
 
     @smart_inference_mode()
     def __call__(self, trainer=None, model=None):

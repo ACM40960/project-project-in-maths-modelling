@@ -92,7 +92,7 @@ class BaseTrainer:
         # Dirs
         # project = self.args.project or Path(SETTINGS['runs_dir']) / self.args.task
         project = self.args.project or Path('runs') / self.args.task
-
+        
         name = self.args.name or f'{self.args.mode}'
         if hasattr(self.args, 'save_dir'):
             self.save_dir = Path(self.args.save_dir)
@@ -246,6 +246,7 @@ class BaseTrainer:
         if RANK in (-1, 0):
             self.test_loader = self.get_dataloader(self.testset, batch_size=batch_size * 2, rank=-1, mode='val')
             self.validator = self.get_validator()
+            self.validator.channels = 3
             metric_keys = self.validator.metrics.keys + self.label_loss_items(prefix='val')
             self.metrics = dict(zip(metric_keys, [0] * len(metric_keys)))  # TODO: init metrics for plot_results()?
             self.ema = ModelEMA(self.model)
@@ -316,8 +317,14 @@ class BaseTrainer:
                 pbar = tqdm(enumerate(self.train_loader), total=nb, bar_format=TQDM_BAR_FORMAT)
             self.tloss = None
             self.optimizer.zero_grad()
-            if hasattr(self.model, 'criterion') and hasattr(self.model.criterion.bce, 'iou_mean'):
-                self.model.criterion.bce.is_train = True
+
+            # if hasattr(self.model, 'criterion') and hasattr(self.model.criterion.bce, 'iou_mean'):
+            #     self.model.criterion.bce.is_train = True
+
+            bce = getattr(getattr(self, 'criterion', None), 'bce', None)
+            if hasattr(bce, 'iou_mean'):
+                bce.is_train = True
+
             for i, batch in pbar:
                 self.run_callbacks('on_train_batch_start')
                 # Warmup
@@ -379,6 +386,10 @@ class BaseTrainer:
                 
             # if hasattr(de_parallel(self.model).criterion.bce, 'iou_mean'):
             #     de_parallel(self.model).criterion.bce.is_train = False
+            bce = getattr(getattr(self, 'criterion', None), 'bce', None)
+            if hasattr(bce, 'iou_mean'):
+                bce.is_train = False
+
             
             self.lr = {f'lr/pg{ir}': x['lr'] for ir, x in enumerate(self.optimizer.param_groups)}  # for loggers
 
