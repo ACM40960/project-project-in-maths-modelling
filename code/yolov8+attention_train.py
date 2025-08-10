@@ -8,6 +8,8 @@ data_yaml_path = os.path.join(dataset_dir, 'data.yaml')
 custom_yaml_path = 'ultralytics_attention/yolov8+OCCAPCC.yaml'
 model_save_path = '../results/saved_models/yolov8+attention_best.pt'
 
+save_model = False
+
 os.makedirs(os.path.dirname(model_save_path), exist_ok=True)
 
 
@@ -23,9 +25,12 @@ results = model.train(
 
 
 # saved trained model
-trained_model_path = os.path.join(results.save_dir, 'weights', 'best.pt')
-if os.path.exists(trained_model_path):
-    os.system(f'cp {trained_model_path} {model_save_path}')
-    print(f"Model saved to {model_save_path}")
+if save_model: 
+    trained_model_path = os.path.join(results.save_dir, 'weights', 'best.pt')
+    if os.path.exists(trained_model_path):
+        os.system(f'cp {trained_model_path} {model_save_path}')
+        print(f"Model saved to {model_save_path}")
+    else:
+        print("Could not find trained model at:", trained_model_path)
 else:
-    print("Could not find trained model at:", trained_model_path)
+    print("Model saving skipped.")
