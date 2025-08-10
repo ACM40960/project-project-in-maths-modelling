@@ -7,13 +7,17 @@ model_save_path = '../results/saved_models'
 os.makedirs(model_save_path, exist_ok=True)
 
 models_info = {
-    'v8baseline': {
-        'init_weights': 'yolov8n.pt', 
-        'save_path': os.path.join(model_save_path, 'yolov8_best.pt')
+    'v8+OCCAPCC': {
+        'init_weights': 'ultralytics_attention/yolov8+OCCAPCC.yaml', 
+        'save_path': os.path.join(model_save_path, 'yolov8+OCCAPCC_best.pt')
     }, 
-    'v11baseline': {
-        'init_weights': 'yolov11n.pt', 
-        'save_path': os.path.join(model_save_path, 'yolov11_best.pt')
+    'v8+OCCAPCC_index6': {
+        'init_weights': 'ultralytics_attention/yolov8+OCCAPCC_index6.yaml', 
+        'save_path': os.path.join(model_save_path, 'yolov8+OCCAPCC_index6_best.pt')
+    }, 
+    'v8+CBAM': {
+        'init_weights': 'ultralytics_attention/yolov8+CBAM.yaml', 
+        'save_path': os.path.join(model_save_path, 'yolov8+CBAM_best.pt')
     }
 }
 
