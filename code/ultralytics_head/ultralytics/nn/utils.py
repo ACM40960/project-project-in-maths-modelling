@@ -32,6 +32,11 @@ from ultralytics.utils.torch_utils import (
     time_sync,
 )
 
+from ultralytics.nn.tasks import (
+    Ensemble, 
+    temporary_modules, 
+    guess_model_task
+)
 
 def attempt_load_one_weight(weight, device=None, inplace=True, fuse=False):
     """

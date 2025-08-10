@@ -10,7 +10,8 @@ from PIL import Image
 
 from ultralytics.cfg import TASK2DATA, get_cfg, get_save_dir
 from ultralytics.engine.results import Results
-from ultralytics.nn.tasks import attempt_load_one_weight, guess_model_task, yaml_model_load
+from ultralytics.nn.tasks import guess_model_task, yaml_model_load
+from ultralytics.nn.utils import attempt_load_one_weight
 from ultralytics.utils import (
     ARGV,
     ASSETS,

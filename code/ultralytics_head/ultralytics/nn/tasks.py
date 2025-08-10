@@ -59,7 +59,7 @@ from ultralytics.nn.modules import (
     RepC3,
     RepConv,
  #   RepNCSPELAN4,
- #   RepVGGDW,
+    # RepVGGDW, 
  #   ResNetLayer,
     RTDETRDecoder,
  #   SCDown,
@@ -70,6 +70,7 @@ from ultralytics.nn.modules import (
  #   YOLOESegment,
  #   v10Detect,
     OCCAPCCChannelAttention,
+    CBAM
 )
 from ultralytics.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, YAML, colorstr, emojis
 from ultralytics.utils.checks import check_requirements, check_suffix, check_yaml
@@ -245,13 +246,13 @@ class BaseModel(torch.nn.Module):
                 if isinstance(m, RepConv):
                     m.fuse_convs()
                     m.forward = m.forward_fuse  # update forward
-                if isinstance(m, RepVGGDW):
-                    m.fuse()
-                    m.forward = m.forward_fuse
-                if isinstance(m, v10Detect):
-                    m.fuse()  # remove one2many head
-                if isinstance(m, YOLOEDetect) and hasattr(self, "pe"):
-                    m.fuse(self.pe.to(next(self.model.parameters()).device))
+                # if isinstance(m, RepVGGDW):
+                #     m.fuse()
+                #     m.forward = m.forward_fuse
+                # if isinstance(m, v10Detect):
+                #     m.fuse()  # remove one2many head
+                # if isinstance(m, YOLOEDetect) and hasattr(self, "pe"):
+                #     m.fuse(self.pe.to(next(self.model.parameters()).device))
             self.info(verbose=verbose)
 
         return self
@@ -293,7 +294,8 @@ class BaseModel(torch.nn.Module):
         self = super()._apply(fn)
         m = self.model[-1]  # Detect()
         if isinstance(
-            m, Detect
+            m, 
+            (Detect, Detect_Efficient3DBB)
         ):  # includes all Detect subclasses like Segment, Pose, OBB, WorldDetect, YOLOEDetect, YOLOESegment
             m.stride = fn(m.stride)
             m.anchors = fn(m.anchors)
@@ -405,7 +407,8 @@ class DetectionModel(BaseModel):
 
         # Build strides
         m = self.model[-1]  # Detect()
-        if isinstance(m, Detect):  # includes all Detect subclasses like Segment, Pose, OBB, YOLOEDetect, YOLOESegment
+        if isinstance(m, 
+                      (Detect, Detect_Efficient3DBB)):  # includes all Detect subclasses like Segment, Pose, OBB, YOLOEDetect, YOLOESegment
             s = 256  # 2x min stride
             m.inplace = self.inplace
 
@@ -1040,7 +1043,7 @@ class YOLOEModel(DetectionModel):
 
         assert not self.training
         head = self.model[-1]
-        assert isinstance(head, YOLOEDetect)
+        # assert isinstance(head, YOLOEDetect)
         return head.get_tpe(txt_feats)  # run auxiliary text head
 
     @smart_inference_mode()
@@ -1067,7 +1070,7 @@ class YOLOEModel(DetectionModel):
         """
         assert not self.training
         head = self.model[-1]
-        assert isinstance(head, YOLOEDetect)
+        # assert isinstance(head, YOLOEDetect)
 
         # Cache anchors for head
         device = next(self.parameters()).device
@@ -1098,7 +1101,7 @@ class YOLOEModel(DetectionModel):
         """
         assert not self.training
         head = self.model[-1]
-        assert isinstance(head, YOLOEDetect)
+        # assert isinstance(head, YOLOEDetect)
         assert not head.is_fused
 
         tpe = self.get_text_pe(names)
@@ -1178,18 +1181,18 @@ class YOLOEModel(DetectionModel):
                 x = y[m.f] if isinstance(m.f, int) else [x if j == -1 else y[j] for j in m.f]  # from earlier layers
             if profile:
                 self._profile_one_layer(m, x, dt)
-            if isinstance(m, YOLOEDetect):
-                vpe = m.get_vpe(x, vpe) if vpe is not None else None
-                if return_vpe:
-                    assert vpe is not None
-                    assert not self.training
-                    return vpe
-                cls_pe = self.get_cls_pe(m.get_tpe(tpe), vpe).to(device=x[0].device, dtype=x[0].dtype)
-                if cls_pe.shape[0] != b or m.export:
-                    cls_pe = cls_pe.expand(b, -1, -1)
-                x = m(x, cls_pe)
-            else:
-                x = m(x)  # run
+            # if isinstance(m, YOLOEDetect):
+            #     vpe = m.get_vpe(x, vpe) if vpe is not None else None
+            #     if return_vpe:
+            #         assert vpe is not None
+            #         assert not self.training
+            #         return vpe
+            #     cls_pe = self.get_cls_pe(m.get_tpe(tpe), vpe).to(device=x[0].device, dtype=x[0].dtype)
+            #     if cls_pe.shape[0] != b or m.export:
+            #         cls_pe = cls_pe.expand(b, -1, -1)
+            #     x = m(x, cls_pe)
+            # else:
+            #     x = m(x)  # run
 
             y.append(x if m.i in self.save else None)  # save output
             if visualize:
@@ -1551,6 +1554,11 @@ def parse_model(d, ch, verbose=True):
                 n = 1
       #  elif m is ResNetLayer:
       #      c2 = args[1] if args[3] else args[1] * 4
+
+        elif m is CBAM: 
+            c1 = ch[f] 
+            args = [c1, *args]
+            
         elif m is torch.nn.BatchNorm2d:
             args = [ch[f]]
         elif m is Concat:
