@@ -44,7 +44,7 @@ This project aims to investigate whether integrating attention mechanisms and a 
 
 ### Data Collection & Preprocessing
 
-- **Dataset**: We used the *voc_night* subset of the [NTLNP dataset](https://huggingface.co/datasets/myyyyw/NTLNP/tree/main), which contains 10.344 night-time infrared images of wildlife across 17 animals. 
+- **Dataset**: We used the *voc_night* subset of the [NTLNP dataset](https://huggingface.co/datasets/myyyyw/NTLNP/tree/main), which contains 10,344 night-time infrared images of wildlife across 17 animals. 
 
 - **Annotation Format**: All annotations follow the Pascal VOC XML format.
 
@@ -52,7 +52,7 @@ This project aims to investigate whether integrating attention mechanisms and a 
 
     To prepare the dataset, run the preprocessing scripts under `code` folder: 
     ```
-    python code/preprocessing.py
+    python preprocessing.py
     ```
     This script will: 
     - Extract class names and save them to `yolo_dataset/classes_names.txt`
@@ -80,7 +80,7 @@ This project aims to investigate whether integrating attention mechanisms and a 
 
         In a separate experiment, OCCAPCC is placed mid-backbone (at index 6) to assess whether earlier feature enhancement leads to better representations. This positioning helps evaluate how the depth of attention integration affects model performance. 
 
-    - **CBAM** (inserted after SPPF): 
+    - **CBAM** (inserted before SPPF): 
 
         CBAM is placed before SPPF block to enhance deep semantic features before multi-scale pooling. This position allows CBAM to operate on rich, uncompressed feature maps, improving channel and spetial attention. According to [Woo et al., 2018](#references-4), CBAM is most effective when applied after backbone blocks. Placing it before SPPF alighs with this recommentation and avoids disrupting the output used by the neck. 
 
