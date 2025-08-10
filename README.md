@@ -29,7 +29,8 @@ We implement and evaluate the following model variants:
 - **YOLOv8n + OCCAPCC(end)**: OCCAPCC attention module appended at the end of the backbone
 - **YOLOv8n + OCCAPCC(index 6)**: OCCAPCC inserted at backbone layer 6
 - **YOLOv8n + CBAM**: CBAM module used instead of OCCAPCC
-- **YOLOv8n + OCCAPCC + Efficent3DBB head**: Combines OCCAPCC with a custom detection head
+- **YOLOv8n + OCCAPCC + Efficent3DBB**: Combines OCCAPCC with a custom detection head Efficient3DBB
+- **YOLOv8n + CBAM + Efficient3DBB**: Combines CBAM with Efficient3DBB head
 
 
 ## Motivation
@@ -49,6 +50,8 @@ This project aims to investigate whether integrating attention mechanisms and a 
 - **Annotation Format**: All annotations follow the Pascal VOC XML format.
 
 - **Preprocessing**
+
+    Before running the preprocessing script, download `voc_night.rar` from the [NTLNP dataset](https://huggingface.co/datasets/myyyyw/NTLNP/tree/main) and Extract the archive into the `voc_night` folder in your project directory.
 
     To prepare the dataset, run the preprocessing scripts under `code` folder: 
     ```
@@ -100,6 +103,7 @@ We conducted experiments with four model variants to evaluate the impact of atte
 | YOLOv8n + OCCAPCC (index 6) | YOLOv8n with `OCCAPCCChannelAttention` at layer 6 of the backbone | 
 | YOLOv8n + CBAM | YOLOv8n with `CBAM` before `SPPF` | 
 | YOLOv8n + OCCAPCC + Efficient3DBB | YOLOv8 with `OCCAPCCChannelAttention` at the end of the backbone and a custom head `Detect_Efficient3DBB` |
+| YOLOv8n + CBAM + Efficient3DBB | YOLOv8 with `CBAM` in the backbone and a custom detection head `Detect_Efficient3DBB` |
 
 
 ### Training Configuration
@@ -122,20 +126,35 @@ We conducted experiments with four model variants to evaluate the impact of atte
 project/
 ├── code/
 │   ├── ultralytics_attention/
+│   │   ├── ultralytics/
+│   │   ├── ...
+│   │   ├── yolov8+OCCAPCC.yaml
+│   │   ├── yolov8+OCCAPCC_index6.yaml
+│   │   └── yolov8+CBAM.yaml
+│   │ 
 │   ├── ultralytics_head/
-│   ├── 
-│   ├── 
-│   └──
-├── yolo_dataset/ 
-├── results
+│   │   ├── ultralytics/
+│   │   ├── ...
+│   │   ├── yolov8+OCCAPCC+Efficient3dbb.yaml
+│   │   └── yolov8+CBAM+Efficient3dbb.yaml
+│   │ 
+│   ├── yolov8n.pt
+│   ├── yolo11n.pt
+│   ├── preprocessing.py
+│   ├── yolo+baseline_train.py
+│   ├── yolo+baseline_val.py
+│   ├── yolo+attention_train.py
+│   ├── yolo+attention_val.py
+│   ├── yolo+head_train.py
+│   └── yolo+head_val.py
+│   
+├── results/
 │   ├── saved_models/
-│   │   ├── yolov8_best.pt
-│   │   ├── yolov11_best.pt
-│   │   ├──
-│   │   ├──
-│   │   └──
+│   │   └── *_best.pt
+│   │
+│   ├── *.json
 │   └── result.ipynb
-├── .gitignore
+│
 ├── requirements.txt
 └── README.md
 ```
@@ -150,6 +169,7 @@ project/
 | YOLOv8n + OCCAPCC (index 6) | 
 | YOLOv8n + CBAM |  
 | YOLOv8n + OCCAPCC + Efficient3DBB | 
+| YOLOv8n + CBAM + Efficient3DBB | 
 
 
 ## How to Run
