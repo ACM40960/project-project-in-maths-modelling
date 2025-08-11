@@ -6,7 +6,7 @@ import shutil
 # model informations 
 models_info = {
     'v8baseline': '../results/saved_models/yolov8_best.pt', 
-    'v11baseline': '../results/saved_models/yolov8v11_best.pt'
+    'v11baseline': '../results/saved_models/yolov11_best.pt'
 }
 
 data_yaml = '../yolo_dataset/data.yaml'

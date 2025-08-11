@@ -6,7 +6,6 @@ import shutil
 # model informations 
 models_info = {
     'v8+OCCAPCC': '../results/saved_models/yolov8+attention_best.pt', 
-    'v8+OCCAPCC1': '../results/saved_models/yolov8+attention_best1.pt', 
     'v8+OCCAPCC(index6)': '../results/saved_models/yolov8+attention_index6_best.pt',
     'v8+CBAM': '../results/saved_models/yolov8+attentionCBAM_best.pt'
 }
