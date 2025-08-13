@@ -18,7 +18,9 @@ for split in ['train', 'valid', 'test']:
 
 # get class names
 def get_classes(): 
-    """Collect class names from XML annotations and save to a file."""
+    """
+    Collect class names from XML annotations and save to a file.
+    """
 
     print("Collecting class names...")
 
@@ -44,7 +46,9 @@ def get_classes():
 
 # convert xml annotations to yolo txt
 def convert_annotations(classes):
-    """Convert XML annotations to YOLO format and save to label directory."""
+    """
+    Convert XML annotations to YOLO format and save to label directory.
+    """
 
     print("Converting annotations to YOLO format...")
 
@@ -99,7 +103,9 @@ def convert_annotations(classes):
 
 # copy images and labels to respective split directories
 def copy_to_split(image_list, split):
-    """Copy images and labels to the respective split directories."""
+    """
+    Copy images and labels to the respective split directories.
+    """
     
     for img_file in image_list:
         name = os.path.splitext(img_file)[0]
@@ -111,7 +117,9 @@ def copy_to_split(image_list, split):
 
 # split dataset into train, valid, test
 def split_dataset():
-    """Split dataset into train, valid, and test sets."""
+    """
+    Split dataset into train, valid, and test sets.
+    """
 
     print("Splitting dataset into train, valid, and test sets...")
     
@@ -154,8 +162,29 @@ def split_dataset():
 
     print("Dataset split finished.")
 
+
+def write_data_yaml(classes):
+    """
+    Write YOLO data.yaml under yolo_dataset using detected class names.
+    """
+
+    print("Writing data.yaml...")
+
+    yaml_path = os.path.join(output_dir, "data.yaml")
+    with open(yaml_path, "w", encoding="utf-8") as f:
+        f.write("train: images/train\n")
+        f.write("val: images/valid\n\n")
+        f.write("test: images/test\n\n")
+        f.write(f"nc: {len(classes)}\n")
+        f.write("names:\n")
+        for cls in classes:
+            f.write(f"  - {cls}\n")
+    print(f"data.yaml written to {yaml_path}")
+
+
 if __name__ == '__main__': 
     all_classes = get_classes()
     convert_annotations(all_classes)
     split_dataset()
+    write_data_yaml(all_classes)
     print("All preprocessing steps completed successfully.")
