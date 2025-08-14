@@ -59,14 +59,11 @@ We implement and evaluate the following model variants:
     2. **Attention Environment**
 
         ``` sh
-        # create and activate environment
         conda create -n yolo_attention python=3.9 -y
         conda activate yolo_attention
 
-        # install dependencies
         pip install -r requirements.txt
 
-        # install official ultralytics
         cd code/ultralytics_attention
         pip install -e .
         cd ../..
@@ -75,14 +72,11 @@ We implement and evaluate the following model variants:
     3. **Head Environment**
 
         ``` sh
-        # create and activate environment
         conda create -n yolo_head python=3.9 -y
         conda activate yolo_head
 
-        # install dependencies
         pip install -r requirements.txt
 
-        # install official ultralytics
         cd code/ultralytics_head
         pip install -e .
         cd ../..
@@ -99,56 +93,115 @@ We implement and evaluate the following model variants:
         │   └── Annotations/
         ```
 
-4. Preprocess the dataset: 
-
+4. Preprocess the dataset:
+    
     ``` sh
     cd code
     python preprocessing.py
     ```
 
-    - Extract class names and save them to `yolo_dataset/classes_names.txt`
-    - Convert original annotations to YOLO format
-    - Split the dataset into training, validation, and test sets (70% / 10% / 20%)
+    This will create a new folder `yolo_dataset` under the project directory and perform the following steps: 
+    
+    - Extract class names and save them to `yolo_dataset/classes_names.txt` 
+    - Convert the original annotations from Pascal VOC XML to YOLO format 
+    - Split the dataset into training, validation, and test sets with a **70% / 10% / 20%** ratio 
+    - Generate `yolo_dataset/data.yaml` for YOLO training 
+    
+    Resulting structure:
 
+    ``` plaintext
+    project/
+    ├── voc_night/              # original dataset
+    │   ├── JPEGImages/
+    │   ├── Annotations/
+    │   └── YOLOLabels/         # temporary YOLO-format labels
+    ├── yolo_dataset/           # processed dataset for YOLO training
+    │   ├── images/
+    │   │   ├── train
+    │   │   ├── valid
+    │   │   └── test
+    │   ├── labels/
+    │   │   ├── train
+    │   │   ├── valid
+    │   │   └── test
+    │   ├── data.yaml           # YOLO dataset configuration file
+    │   └── classes_names.txt   # list of all class names
+    ```
 
+5. Running training and validation
 
+    - **Baseline Environment** (`yolo_baseline`)
+
+        ``` sh
+        conda activate yolo_baseline
+        cd code
+        python yolo+baseline_train.py
+        python yolo+baseline_val_pred.py
+        ```
+
+    - **Attention Environment** (`yolo_attention`)
+
+        ``` sh
+        conda activate yolo_attention
+        cd code
+        python yolo+attention_train.py
+        python yolo+attention_val_pred.py
+        ```
+
+    - **Head Environment** (`yolo_head`)
+
+        ``` sh
+        conda activate yolo_head
+        cd code
+        python yolo+head_train.py
+        python yolo+head_val_pred.py
+        ```
+
+    This will train the corresponding models, run validation on the test split, generate predictions, and save the following outputs under the results directory:
+
+    - Best weights (`saved_models/*_best.pt`)
+    - Training logs and artefacts (`*_train/`)
+    - Validation results (`*_val/`)
+    - Prediction results (`*_pred/`)
+    - Evaluation metrics (`*.json`)
+
+6. Analyze results
+
+    Open `results/result.ipynb` to aggregate all JSON metrics into a comparison table.
 
 ## Project Structure
 
 ``` plaintext
-project/
-├── code/
-│   ├── ultralytics_attention/
-│   │   ├── ultralytics/
-│   │   ├── ...
-│   │   ├── yolov8+OCCAPCC.yaml         
-│   │   ├── yolov8+OCCAPCC_index6.yaml
-│   │   └── yolov8+CBAM.yaml
-│   │ 
-│   ├── ultralytics_head/
-│   │   ├── ultralytics/
-│   │   ├── ...
-│   │   ├── yolov8+OCCAPCC+Efficient3dbb.yaml
-│   │   └── yolov8+CBAM+Efficient3dbb.yaml
-│   │ 
-│   ├── yolov8n.pt
-│   ├── yolo11n.pt
-│   ├── preprocessing.py
-│   ├── yolo+baseline_train.py
-│   ├── yolo+baseline_val_pred.py
-│   ├── yolo+attention_train.py
-│   ├── yolo+attention_val_pred.py
-│   ├── yolo+head_train.py
-│   └── yolo+head_val_pred.py
-│   
-├── results/
-│   ├── saved_models/
-│   │   └── *_best.pt
-│   │
-│   ├── *.json
-│   └── result.ipynb
-│
-├── requirements.txt
+project/ 
+├── code/ 
+│ ├── ultralytics_attention/ 
+│ │ ├── ultralytics/ 
+│ │ ├── ... 
+│ │ ├── yolov8+OCCAPCC.yaml 
+│ │ ├── yolov8+OCCAPCC_index6.yaml 
+│ │ └── yolov8+CBAM.yaml 
+│ ├── ultralytics_head/ 
+│ │ ├── ultralytics/ 
+│ │ ├── ... 
+│ │ ├── yolov8+OCCAPCC+Efficient3dbb.yaml 
+│ │ └── yolov8+CBAM+Efficient3dbb.yaml 
+│ ├── yolov8n.pt 
+│ ├── yolo11n.pt 
+│ ├── preprocessing.py 
+│ ├── yolo+baseline_train.py 
+│ ├── yolo+baseline_val_pred.py 
+│ ├── yolo+attention_train.py 
+│ ├── yolo+attention_val_pred.py 
+│ ├── yolo+head_train.py 
+│ └── yolo+head_val_pred.py 
+├── results/ 
+│ ├── saved_models/ 
+│ │ └── *_best.pt 
+│ ├── *_val/ 
+│ ├── *.json 
+│ └── result.ipynb 
+├── Literature_review.pdf 
+├── requirements.txt 
 └── README.md
 ```
 
