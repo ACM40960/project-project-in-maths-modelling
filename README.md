@@ -2,25 +2,16 @@
 
 ## Table of Contents
 
-1. [Project Overview](#project-overview)
-2. [Motivation](#motivation)
-3. [Methodology](#methodology)
-    - [Data Collection & Preprocessing](#data-collection--preprocessing)
-    - [Model Architecture](#model-architecture)
-    - [Model Variants Compared](#model-variants-compared)
-    - [Training Comfiguration](#training-configuration)
-    - [Evaluation Metrics](#evaluation-metrics)
-4. [Project Structure](#project-structure)
-5. [Results](#results)
-6. [How to Run](#how-to-run)
-7. [Project Poster](#project-poster)
-8. [References](#references)
-9. [License](#license)
+
+
+## Abstract
+
+Accurate recognition of wildlife in their natural habitats is essential for ecological research and biodiversity conservation. While object detection models such as YOLO perform well on well-lit, high-resolution datasets, their performance often degreades in low-light environments or infrared camera settings, which are common in rael-world field monitoring. 
+
+This project explores architectural modifications to the YOLOv8 object detection model for improved performance on infrared wildlife images captured at night. Specially, we investigate whether integrating attention mechanisms (OCCAPCC, CBAM) and a custom detection head (Efficient3DBB) can enhance detection accuracy under low-light conditions. We evaluate multiple variants, including YOLOv8n and YOLOv11n baselines, uncer the same training settings. 
 
 
 ## Project Overview
-
-This project explores architectural modifications to the YOLOv8 object detection model for improved performance on infrared wildlife images captured at night. Our primary goal is to investigate whether integrating attention mechanisms and custom detection heads can enhance detection accuracy under low-light conditions. 
 
 We implement and evaluate the following model variants: 
 
@@ -33,13 +24,230 @@ We implement and evaluate the following model variants:
 - **YOLOv8n + CBAM + Efficient3DBB**: Combines CBAM with Efficient3DBB head
 
 
-## Motivation
+## Installation
 
-Accurate recognition of wildlife in their natural habitats is essential for ecological research and biodiversity conservation. While object detection models such as YOLO perform well on well-lit, high-resolution datasets, their performance often degrades in low-light environments or infrared camera settings, which are commonly encountered in real-world field monitoring.
+1. Clone the repository: 
 
-Previous studies have shown that incorporating attention mechanisms can help improve model performance. For example, YOLOv8-night enhances detection accuracy in dark scenes by introducing a channel attention module.
+    ``` sh
+    git clone https://github.com/ACM40960/project-project-in-maths-modelling
+    cd  project-project-in-maths-modelling
+    ```
 
-This project aims to investigate whether integrating attention mechanisms and a custom detection head into the YOLOv8 architecture can further improve detection accuracy under low-light conditions.
+2. Create virtual environments: 
+
+    You need to set up three separate environments for running different model variants: 
+
+    - **Baseline** - official Ultralytics YOLOv8 / YOLOv11
+    - **Attention** - modified Ultralytics (located in `code/ultralytics_attention`)
+    - **Head** - modified Ultralytics with custom detection head (located in `code/ultralytics_head`)
+
+
+    1. **Baseline Environment**
+
+        ``` sh
+        # create and activate environment
+        conda create -n yolo_baseline python=3.9 -y
+        conda activate yolo_baseline
+
+        # install dependencies
+        pip install -r requirements.txt
+
+        # install official ultralytics
+        pip install ultralytics
+        ```
+
+    2. **Attention Environment**
+
+        ``` sh
+        # create and activate environment
+        conda create -n yolo_attention python=3.9 -y
+        conda activate yolo_attention
+
+        # install dependencies
+        pip install -r requirements.txt
+
+        # install official ultralytics
+        cd code/ultralytics_attention
+        pip install -e .
+        cd ../..
+        ```
+
+    3. **Head Environment**
+
+        ``` sh
+        # create and activate environment
+        conda create -n yolo_head python=3.9 -y
+        conda activate yolo_head
+
+        # install dependencies
+        pip install -r requirements.txt
+
+        # install official ultralytics
+        cd code/ultralytics_head
+        pip install -e .
+        cd ../..
+        ```
+3. Download the dataset: 
+
+    - Get `voc_night.rar` from the [NTLNP dataset](https://huggingface.co/datasets/myyyyw/NTLNP)
+    - Extract the archive directly into the project directory so that the extracted folder is named `voc_night`:
+
+        ```plaintext
+        project/
+        ├── voc_night/
+        │   ├── JPEGImages/
+        │   └── Annotations/
+        ```
+
+4. Preprocess the dataset: 
+
+    ``` sh
+    cd code
+    python preprocessing.py
+    ```
+
+    - Extract class names and save them to `yolo_dataset/classes_names.txt`
+    - Convert original annotations to YOLO format
+    - Split the dataset into training, validation, and test sets (70% / 10% / 20%)
+
+
+
+
+## Project Structure
+
+``` plaintext
+project/
+├── code/
+│   ├── ultralytics_attention/
+│   │   ├── ultralytics/
+│   │   ├── ...
+│   │   ├── yolov8+OCCAPCC.yaml         
+│   │   ├── yolov8+OCCAPCC_index6.yaml
+│   │   └── yolov8+CBAM.yaml
+│   │ 
+│   ├── ultralytics_head/
+│   │   ├── ultralytics/
+│   │   ├── ...
+│   │   ├── yolov8+OCCAPCC+Efficient3dbb.yaml
+│   │   └── yolov8+CBAM+Efficient3dbb.yaml
+│   │ 
+│   ├── yolov8n.pt
+│   ├── yolo11n.pt
+│   ├── preprocessing.py
+│   ├── yolo+baseline_train.py
+│   ├── yolo+baseline_val_pred.py
+│   ├── yolo+attention_train.py
+│   ├── yolo+attention_val_pred.py
+│   ├── yolo+head_train.py
+│   └── yolo+head_val_pred.py
+│   
+├── results/
+│   ├── saved_models/
+│   │   └── *_best.pt
+│   │
+│   ├── *.json
+│   └── result.ipynb
+│
+├── requirements.txt
+└── README.md
+```
+
+
+## Methodology
+
+### Data Collection and Preprocessing
+
+- **Dataset**: 
+    
+    *voc_night* subset of the NTLNP dataset containing 10,344 night-time infrared images across 17 animal classes. 
+
+- **Annotation Format**: 
+
+    Pascal VOC XML format. 
+
+- **Preprocessing Steps**: 
+
+    - Extract class names
+    - Convert annotations to YOLO format
+    - Split dataset into train/valid/test (70%/10%/20%)
+
+### Model Architecture
+
+- **Base Models**: 
+
+    - YOLOv8n: Lightweight architecture for real-time detection. 
+    - YOLOv11n: Updated architecture with `c3k2`, `C2PSA`, and `YOLOEDetect` head for better accuracy and efficiency. 
+
+- **Attention Modules**: 
+
+    - OCCAPCC: Place
+
+### Trainign Configuration
+
+- **Input Size**: 640 $\times$ 640
+- **Batch Size**: 16
+- **Epochs**: 50
+
+
+### Evaluation Metrics
+
+- **mAP@0.5**: Mean Average Precision at IoU 0.5
+- **mAP@0.5:0.95**: Averaged mAP across IoU thresholds 0.5 ~ 0.95
+- **Precision**: Correct detections among all predicted positives
+- **Recal**: Correct detections among all actual positives
+
+## Results
+
+| Model Variant | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
+| ---- | ---- | ---- | ---- | ---- | 
+| Baseline YOLOv8n | 
+| Baseline YOLOv11n | 
+| YOLOv8n + OCCAPCC (end) |
+| YOLOv8n + OCCAPCC (index 6) | 
+| YOLOv8n + CBAM |  
+| YOLOv8n + OCCAPCC + Efficient3DBB | 
+| YOLOv8n + CBAM + Efficient3DBB | 
+
+
+## Project Poster
+
+See [Project_Poster.pdf]() for a visual summary of the project.
+
+
+## References
+
+[1] NTLNP Dataset - https://huggingface.co/datasets/myyyyw/NTLNP
+
+[2] Ultralytics Document - https://github.com/ultralytics/ultralytics
+
+[3] Tianyu Wang, Siyu Ren, Haiyan Zhang. *Nighttime wildlife object detection based on YOLOv8-night*. Electronics Letters, vol. 60, no. 15, 2024. [https://doi.org/10.1049/ell2.13305](https://doi.org/10.1049/ell2.13305)
+
+
+[4] Sanghyun Woo, Jongchan Park, Joon-Young Lee, In So Kweon. *CBAM: Convolutional Block Attention Module*. arXiv:1807.06521 [cs.CV], 2018. [https://doi.org/10.48550/arXiv.1807.06521](https://doi.org/10.48550/arXiv.1807.06521)
+
+[5] Wan, D., Lu, R., Hu, B., Yin, J., Shen, S., Xu, T., & Lang, X. (2024). *YOLO-MIF: Improved YOLOv8 with Multi-Information fusion for object detection in gray-scale images.* Advanced Engineering Informatics, 62(B), 102709. [https://doi.org/10.1016/j.aei.2024.102709](https://doi.org/10.1016/j.aei.2024.102709)
+
+
+## License
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Methodology
 
@@ -190,6 +398,7 @@ See Project_Poster.pdf for a visual summary of the project.
 
 <a id='references-4'>[4]</a> Sanghyun Woo, Jongchan Park, Joon-Young Lee, In So Kweon. *CBAM: Convolutional Block Attention Module*. arXiv:1807.06521 [cs.CV], 2018. [https://doi.org/10.48550/arXiv.1807.06521](https://doi.org/10.48550/arXiv.1807.06521)
 
+[5] Wan, D., Lu, R., Hu, B., Yin, J., Shen, S., Xu, T., & Lang, X. (2024). *YOLO-MIF: Improved YOLOv8 with Multi-Information fusion for object detection in gray-scale images.* Advanced Engineering Informatics, 62(B), 102709. [https://doi.org/10.1016/j.aei.2024.102709](https://doi.org/10.1016/j.aei.2024.102709)
 
 ## License
 
