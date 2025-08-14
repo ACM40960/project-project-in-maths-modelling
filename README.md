@@ -27,13 +27,13 @@ This project explores architectural modifications to the YOLOv8 object detection
 
 We implement and evaluate the following model variants: 
 
-- **YOLOv8n**: Baseline model provided by Ultralytics
-- **YOLOv11n**: Baseline model provided by Ultralytics
-- **YOLOv8n + OCCAPCC(end)**: OCCAPCC attention module appended at the end of the backbone
-- **YOLOv8n + OCCAPCC(index 6)**: OCCAPCC inserted at backbone layer 6
-- **YOLOv8n + CBAM**: CBAM module used instead of OCCAPCC
-- **YOLOv8n + OCCAPCC + Efficent3DBB**: Combines OCCAPCC with a custom detection head Efficient3DBB
-- **YOLOv8n + CBAM + Efficient3DBB**: Combines CBAM with Efficient3DBB head
+1. **YOLOv8n**: Baseline model provided by Ultralytics
+2. **YOLOv11n**: Baseline model provided by Ultralytics
+3. **YOLOv8n + OCCAPCC(end)**: OCCAPCC attention module appended at the end of the backbone
+4. **YOLOv8n + OCCAPCC(index 6)**: OCCAPCC inserted at backbone layer 6
+5. **YOLOv8n + CBAM**: CBAM module used instead of OCCAPCC
+6. **YOLOv8n + OCCAPCC + Efficent3DBB**: Combines OCCAPCC with a custom detection head Efficient3DBB
+7. **YOLOv8n + CBAM + Efficient3DBB**: Combines CBAM with Efficient3DBB head
 
 
 ## Installation
@@ -289,10 +289,10 @@ Full arthitecture definitions are available in:
 | YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
 | YOLOv8n + CBAM + Efficient3DBB | 0.9416 | 0.7739 | 0.9271 | 0.8931 | 
 
+YOLOv11n achieved the highest scores across all metrics. Among the YOLOv8n variants, the combination of CBAM and Efficient3DBB performed best. 
 
 
 ### Confusion Matrix
-
 
 <div align="center">
   <img src="images/cm_norm_v8+CBAM+Eff.png" alt="Normalized Confusion Matrix - YOLOv8n + CBAM + Efficient3DBB" width="600">
@@ -300,46 +300,67 @@ Full arthitecture definitions are available in:
   <em>Figure: Normalized confusion matrix for YOLOv8n with CBAM attention and Efficient3DBB.</em>
 </div>
 
+Similar confusion matrices for other models can be found in the `results/*_val/` directories. 
+
+
 ### Precision-Recall Curves
 
+![](images/PR_curve1.png)
+![](images/PR_curve2.png)
+![](images/PR_curve3.png)
+![](images/PR_curve4.png)
 
-<div align="center">
-  <div style="display:inline-block; margin: 0 5px;">
-    <img src="images/PR_curve_v8baseline.png" alt="YOLOv8n PR Curve" width="250"><br>
-    <p>YOLOv8n</p>
-  </div>
-  <div style="display:inline-block; margin: 0 5px;">
-    <img src="images/PR_curve_v11baseline.png" alt="YOLOv11n PR Curve" width="250"><br>
-    <p>YOLOv11n</p>
-  </div>
-</div>
-<div align="center">
-  <div style="display:inline-block; margin: 0 5px;">
-    <img src="images/PR_curve_v8+OCCAPCC(index6).png" alt="OCCAPCC (index 6) PR Curve" width="250"><br>
-    <p>OCCAPCC (index 6)</p>
-  </div>
-  <div style="display:inline-block; margin: 0 5px;">
-    <img src="images/PR_curve_v8+OCCAPCC.png" alt="OCCAPCC (end) PR Curve" width="250"><br>
-    <p>OCCAPCC (end)</p>
-  </div>
-</div>
-<div align="center">
-  <div style="display:inline-block; margin: 0 5px;">
-    <img src="images/PR_curve_v8+CBAM.png" alt="CBAM PR Curve" width="250"><br>
-    <p>CBAM</p>
-  </div>
-  <div style="display:inline-block; margin: 0 5px;">
-    <img src="images/PR_curve_v8+OCCAPCC+Eff.png" alt="OCCAPCC + Efficient3DBB PR Curve" width="250"><br>
-    <p>OCCAPCC + Efficient3DBB</p>
-  </div>
-</div>
-<div align="center">
-  <div style="display:inline-block; text-align:center; margin: 0 5px;">
-    <img src="images/PR_curve_v8+CBAM+Eff.png" alt="CBAM + Efficient3DBB PR Curve" width="250"><br>
-    <p>CBAM + Efficient3DBB</p>
-    <em>Figure: YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.</em>
-  </div>
-</div>
+*Figure: Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom-right). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 6), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
+
+
+
+
+
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="images/PR_curve_v8baseline.png" width="250"><br>
+      標題1
+    </td>
+    <td align="center">
+      <img src="images/PR_curve_v11baseline.png" width="250"><br>
+      標題2
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="images/PR_curve_v8+OCCAPCC(index6).png" width="250"><br>
+      標題3
+    </td>
+    <td align="center">
+      <img src="images/PR_curve_v8+OCCAPCC.png" width="250"><br>
+      標題4
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="images/PR_curve_v8+CBAM.png" width="250"><br>
+      標題5
+    </td>
+    <td align="center">
+      <img src="images/PR_curve_v8+OCCAPCC+Eff.png" width="250"><br>
+      標題6
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="images/PR_curve_v8+CBAM+Eff.png" width="250"><br>
+      標題7
+    </td>
+    <td align="center">
+      <img src="images/img8.png" width="250"><br>
+      標題8
+    </td>
+  </tr>
+</table>
+
+
+
 
 
 
