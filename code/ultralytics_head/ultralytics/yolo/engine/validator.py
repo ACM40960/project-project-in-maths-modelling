@@ -76,7 +76,8 @@ class BaseValidator:
         self.speed = {'preprocess': 0.0, 'inference': 0.0, 'loss': 0.0, 'postprocess': 0.0}
         self.jdict = None
 
-        project = self.args.project or Path(SETTINGS['runs_dir']) / self.args.task
+        # project = self.args.project or Path(SETTINGS['runs_dir']) / self.args.task
+        project = self.args.project or Path('runs') / self.args.task
         name = self.args.name or f'{self.args.mode}'
         self.save_dir = save_dir or increment_path(Path(project) / name,
                                                    exist_ok=self.args.exist_ok if RANK in (-1, 0) else True)

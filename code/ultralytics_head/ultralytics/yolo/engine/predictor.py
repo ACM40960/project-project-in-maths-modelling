@@ -85,7 +85,8 @@ class BasePredictor:
             overrides (dict, optional): Configuration overrides. Defaults to None.
         """
         self.args = get_cfg(cfg, overrides)
-        project = self.args.project or Path(SETTINGS['runs_dir']) / self.args.task
+        # project = self.args.project or Path(SETTINGS['runs_dir']) / self.args.task
+        project = self.args.project or Path('runs') / self.args.task
         name = self.args.name or f'{self.args.mode}'
         self.save_dir = increment_path(Path(project) / name, exist_ok=self.args.exist_ok)
         if self.args.conf is None:
