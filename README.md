@@ -287,21 +287,45 @@ Full arthitecture definitions are available in:
 
 ### Precision-Recall Curves
 
-<div align="center">
-  <img src="images/PR_curve_v8baseline.png" alt="YOLOv8n PR Curve" width="250">
-  <img src="images/PR_curve_v11baseline.png" alt="YOLOv11n PR Curve" width="250">
-  <img src="images/PR_curve_v8+OCCAPCC(index6).png" alt="OCCAPCC (index 6) PR Curve" width="250">
-</div>
 
 <div align="center">
-  <img src="images/PR_curve_v8+OCCAPCC.png" alt="OCCAPCC (end) PR Curve" width="250">
-  <img src="images/PR_curve_v8+CBAM.png" alt="CBAM PR Curve" width="250">
-  <img src="images/PR_curve_v8+OCCAPCC+Eff.png" alt="OCCAPCC+Efficient3DBB PR Curve" width="250">
+  <div style="display:inline-block; margin: 0 10px;">
+    <img src="images/PR_curve_v8baseline.png" alt="YOLOv8n PR Curve" width="300"><br>
+    <p>YOLOv8n</p>
+  </div>
+  <div style="display:inline-block; margin: 0 10px;">
+    <img src="images/PR_curve_v11baseline.png" alt="YOLOv11n PR Curve" width="300"><br>
+    <p>YOLOv11n</p>
+  </div>
+</div>
+<div align="center">
+  <div style="display:inline-block; margin: 0 10px;">
+    <img src="images/PR_curve_v8+OCCAPCC(index6).png" alt="OCCAPCC (index 6) PR Curve" width="300"><br>
+    <p>OCCAPCC (index 6)</p>
+  </div>
+  <div style="display:inline-block; margin: 0 10px;">
+    <img src="images/PR_curve_v8+OCCAPCC.png" alt="OCCAPCC (end) PR Curve" width="300"><br>
+    <p>OCCAPCC (end)</p>
+  </div>
+</div>
+<div align="center">
+  <div style="display:inline-block; margin: 0 10px;">
+    <img src="images/PR_curve_v8+CBAM.png" alt="CBAM PR Curve" width="300"><br>
+    <p>CBAM</p>
+  </div>
+  <div style="display:inline-block; margin: 0 10px;">
+    <img src="images/PR_curve_v8+OCCAPCC+Eff.png" alt="OCCAPCC + Efficient3DBB PR Curve" width="300"><br>
+    <p>OCCAPCC + Efficient3DBB</p>
+  </div>
+</div>
+<div align="center">
+  <div style="display:inline-block; text-align:center; margin: 0 10px;">
+    <img src="images/PR_curve_v8+CBAM+Eff.png" alt="CBAM + Efficient3DBB PR Curve" width="300"><br>
+    <p>CBAM + Efficient3DBB</p>
+    <em>Figure: YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.</em>
+  </div>
 </div>
 
-<div align="center">
-  <img src="images/PR_curve_v8+CBAM+Eff.png" alt="CBAM+Efficient3DBB PR Curve" width="250">
-</div>
 
 
 ### Prediction Examples
@@ -310,7 +334,7 @@ Full arthitecture definitions are available in:
 
 ## Project Poster
 
-See [Project_Poster.pdf]() for a visual summary of the project.
+See [Project_Poster.pdf](Project_Poster.pdf) for a visual summary of the project.
 
 
 ## References
