@@ -28,7 +28,8 @@ for name, cfg in models_info.items():
         batch = 16
     )
 
-    trained_model_path = os.path.join(results.save_dir, 'weights', 'best.pt')
+    save_dir = model.trainer.save_dir
+    trained_model_path = os.path.join(save_dir, 'weights', 'best.pt')
     if os.path.exists(trained_model_path):
         os.makedirs(os.path.dirname(cfg['save_path']), exist_ok=True)
         shutil.copy2(trained_model_path, cfg['save_path'])
@@ -36,7 +37,7 @@ for name, cfg in models_info.items():
     else:
         print(f"Could not find trained model at: {trained_model_path}")
 
-    train_folder = results.save_dir
+    train_folder = save_dir
     if train_folder:
         target_folder = os.path.join('..', 'results', f'{name}_train')
         if os.path.exists(target_folder):
