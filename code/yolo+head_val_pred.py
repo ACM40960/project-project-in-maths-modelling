@@ -9,7 +9,7 @@ do_pred = True  # whether to run predict
 
 # model informations 
 models_info = {
-    'v8+CBAM+Efficient3dbb': '../results/saved_models/yolov8+CBAM+Efficient3dbb_best.pt', 
+    # 'v8+CBAM+Efficient3dbb': '../results/saved_models/yolov8+CBAM+Efficient3dbb_best.pt', 
     'v8+OCCAPCC+Efficient3dbb': '../results/saved_models/yolov8+OCCAPCC+Efficient3dbb_best.pt'
 }
 
