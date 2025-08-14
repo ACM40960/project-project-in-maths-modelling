@@ -227,6 +227,12 @@ project/
     
     *voc_night* subset of the NTLNP dataset containing 10,344 night-time infrared images across 17 animal classes. 
 
+<div align="center">
+  <img src="images/NTLNP_examples.png" alt="Example Images in NTLNP/voc_night" width="600">
+  
+  <em>Figure: Example images in NTLNP/voc_night.</em>
+</div>
+
 - **Annotation Format**: 
 
     Pascal VOC XML format. 
@@ -269,7 +275,9 @@ Full arthitecture definitions are available in:
 
 ## Results
 
-### Summary Table
+### Summary Table 
+
+*Table 1. Performance of different YOLO model variants on the test set, evaluated by mAP@0.5, mAP@0.5:0.95, precision, and recall.*
 
 | Model Variant | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
 | ---- | ----: | ----: | ----: | ----: | 
@@ -282,45 +290,52 @@ Full arthitecture definitions are available in:
 | YOLOv8n + CBAM + Efficient3DBB | 0.9416 | 0.7739 | 0.9271 | 0.8931 | 
 
 
+
 ### Confusion Matrix
 
+
+<div align="center">
+  <img src="images/cm_norm_v8+CBAM+Eff.png" alt="Normalized Confusion Matrix - YOLOv8n + CBAM + Efficient3DBB" width="600">
+  
+  <em>Figure: Normalized confusion matrix for YOLOv8n with CBAM attention and Efficient3DBB.</em>
+</div>
 
 ### Precision-Recall Curves
 
 
 <div align="center">
-  <div style="display:inline-block; margin: 0 10px;">
-    <img src="images/PR_curve_v8baseline.png" alt="YOLOv8n PR Curve" width="300"><br>
+  <div style="display:inline-block; margin: 0 5px;">
+    <img src="images/PR_curve_v8baseline.png" alt="YOLOv8n PR Curve" width="250"><br>
     <p>YOLOv8n</p>
   </div>
-  <div style="display:inline-block; margin: 0 10px;">
-    <img src="images/PR_curve_v11baseline.png" alt="YOLOv11n PR Curve" width="300"><br>
+  <div style="display:inline-block; margin: 0 5px;">
+    <img src="images/PR_curve_v11baseline.png" alt="YOLOv11n PR Curve" width="250"><br>
     <p>YOLOv11n</p>
   </div>
 </div>
 <div align="center">
-  <div style="display:inline-block; margin: 0 10px;">
-    <img src="images/PR_curve_v8+OCCAPCC(index6).png" alt="OCCAPCC (index 6) PR Curve" width="300"><br>
+  <div style="display:inline-block; margin: 0 5px;">
+    <img src="images/PR_curve_v8+OCCAPCC(index6).png" alt="OCCAPCC (index 6) PR Curve" width="250"><br>
     <p>OCCAPCC (index 6)</p>
   </div>
-  <div style="display:inline-block; margin: 0 10px;">
-    <img src="images/PR_curve_v8+OCCAPCC.png" alt="OCCAPCC (end) PR Curve" width="300"><br>
+  <div style="display:inline-block; margin: 0 5px;">
+    <img src="images/PR_curve_v8+OCCAPCC.png" alt="OCCAPCC (end) PR Curve" width="250"><br>
     <p>OCCAPCC (end)</p>
   </div>
 </div>
 <div align="center">
-  <div style="display:inline-block; margin: 0 10px;">
-    <img src="images/PR_curve_v8+CBAM.png" alt="CBAM PR Curve" width="300"><br>
+  <div style="display:inline-block; margin: 0 5px;">
+    <img src="images/PR_curve_v8+CBAM.png" alt="CBAM PR Curve" width="250"><br>
     <p>CBAM</p>
   </div>
-  <div style="display:inline-block; margin: 0 10px;">
-    <img src="images/PR_curve_v8+OCCAPCC+Eff.png" alt="OCCAPCC + Efficient3DBB PR Curve" width="300"><br>
+  <div style="display:inline-block; margin: 0 5px;">
+    <img src="images/PR_curve_v8+OCCAPCC+Eff.png" alt="OCCAPCC + Efficient3DBB PR Curve" width="250"><br>
     <p>OCCAPCC + Efficient3DBB</p>
   </div>
 </div>
 <div align="center">
-  <div style="display:inline-block; text-align:center; margin: 0 10px;">
-    <img src="images/PR_curve_v8+CBAM+Eff.png" alt="CBAM + Efficient3DBB PR Curve" width="300"><br>
+  <div style="display:inline-block; text-align:center; margin: 0 5px;">
+    <img src="images/PR_curve_v8+CBAM+Eff.png" alt="CBAM + Efficient3DBB PR Curve" width="250"><br>
     <p>CBAM + Efficient3DBB</p>
     <em>Figure: YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.</em>
   </div>
@@ -353,4 +368,4 @@ See [Project_Poster.pdf](Project_Poster.pdf) for a visual summary of the project
 
 ## License
 
-
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
