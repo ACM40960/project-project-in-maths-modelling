@@ -157,13 +157,13 @@ We implement and evaluate the following model variants:
         python yolo+head_val_pred.py
         ```
 
-    This will train the corresponding models, run validation on the test split, generate predictions, and save the following outputs under the results directory:
+    This will train the corresponding models, run validation on the test split, generate predictions, and save the following outputs under the `results` directory:
 
-    - Best weights (`saved_models/*_best.pt`)
-    - Training logs and artefacts (`*_train/`)
-    - Validation results (`*_val/`)
-    - Prediction results (`*_pred/`)
-    - Evaluation metrics (`*.json`)
+    - Best weights (`results/saved_models/*_best.pt`)
+    - Training logs and artefacts (`results/*_train/`)
+    - Validation results (`results/*_val/`)
+    - Prediction results (`results/*_pred/`)
+    - Evaluation metrics (`results/*.json`)
 
 6. Analyze results
 
@@ -173,36 +173,37 @@ We implement and evaluate the following model variants:
 
 ``` plaintext
 project/ 
-├── code/ 
-│ ├── ultralytics_attention/ 
-│ │ ├── ultralytics/ 
-│ │ ├── ... 
-│ │ ├── yolov8+OCCAPCC.yaml 
-│ │ ├── yolov8+OCCAPCC_index6.yaml 
-│ │ └── yolov8+CBAM.yaml 
-│ ├── ultralytics_head/ 
-│ │ ├── ultralytics/ 
-│ │ ├── ... 
-│ │ ├── yolov8+OCCAPCC+Efficient3dbb.yaml 
-│ │ └── yolov8+CBAM+Efficient3dbb.yaml 
-│ ├── yolov8n.pt 
-│ ├── yolo11n.pt 
-│ ├── preprocessing.py 
-│ ├── yolo+baseline_train.py 
-│ ├── yolo+baseline_val_pred.py 
-│ ├── yolo+attention_train.py 
-│ ├── yolo+attention_val_pred.py 
-│ ├── yolo+head_train.py 
-│ └── yolo+head_val_pred.py 
-├── results/ 
-│ ├── saved_models/ 
-│ │ └── *_best.pt 
-│ ├── *_val/ 
-│ ├── *.json 
-│ └── result.ipynb 
-├── Literature_review.pdf 
-├── requirements.txt 
-└── README.md
+├── code/                                       # source code    
+│   ├── ultralytics_attention/                  # modified Ultralytics with attention modules
+│   │   ├── ultralytics/                        # Ultralytics source code (attention version) 
+│   │   ├── ...                                 # other supporting files 
+│   │   ├── yolov8+OCCAPCC.yaml                 # YOLO config with OCCAPCC at backbone end
+│   │   ├── yolov8+OCCAPCC_index6.yaml          # YOLO config with OCCAPCC at backbone layer 6 
+│   │   └── yolov8+CBAM.yaml                    # YOLO config with CBAM 
+│   ├── ultralytics_head/                       # modified Ultralytics with custom detect head
+│   │   ├── ultralytics/                        # Ultralytics source code (head version)
+│   │   ├── ... 
+│   │   ├── yolov8+OCCAPCC+Efficient3dbb.yaml   # YOLO config with OCCAPCC + Efficient3DBB
+│   │   └── yolov8+CBAM+Efficient3dbb.yaml      # YOLO config with CBAM + Efficient3DBB
+│   ├── yolov8n.pt                              # pretrained YOLOv8n weights
+│   ├── yolo11n.pt                              # pretrained YOLOv11n weights
+│   ├── preprocessing.py                        # script for dataset preprocessing
+│   ├── yolo+baseline_train.py                  # training script for YOLOv8n & YOLOv11n baselines
+│   ├── yolo+baseline_val_pred.py               # validation & prediction script for baselines
+│   ├── yolo+attention_train.py                 # training script for attention models
+│   ├── yolo+attention_val_pred.py              # validation & prediction script for attention models 
+│   ├── yolo+head_train.py                      # training script for head models
+│   └── yolo+head_val_pred.py                   # valiation & prediction script for head models
+├── results/                                    # model outputs and evaluation results
+│   ├── saved_models/                           # best weights from training
+│   │   └── *_best.pt 
+│   ├── *_val/                                  # validation results (per model)
+│   ├── *.json                                  # evaluation results (per model)
+│   └── result.ipynb                            # notebook for aggregating metrics 
+├── images/                                     # images for README
+├── README.md                                   # project documentation
+├── requirements.txt                            # Python dependencies
+└── Literature_review.pdf                       # literature review document
 ```
 
 
@@ -220,20 +221,22 @@ project/
 
 - **Preprocessing Steps**: 
 
-    - Extract class names
-    - Convert annotations to YOLO format
-    - Split dataset into train/valid/test (70%/10%/20%)
+    Converted to YOLO format, split into train/val/test sets (70% / 10% / 20%), and generated data.yaml for YOLO training *(see [Installation – Step 4](#installation) for execution details)*.
 
 ### Model Architecture
 
-- **Base Models**: 
+- **Baselines**: YOLOv8n, YOLOv11n (official Ultralytics)
+- **Attention Models**: YOLOv8n with OCCAPCC (end / index 6) or CBAM
+- **Head Models**: YOLOv8n with OCCAPCC or CBAM combined with Efficient3DBB
 
-    - YOLOv8n: Lightweight architecture for real-time detection. 
-    - YOLOv11n: Updated architecture with `c3k2`, `C2PSA`, and `YOLOEDetect` head for better accuracy and efficiency. 
+Full arthitecture definitions are available in: 
 
-- **Attention Modules**: 
+- [Attention Models YAMLs](code/ultralytics_attention/)
+- [Head Models YAMLs](code/ultralytics_head/)
 
-    - OCCAPCC: Place
+![Model Architecture](images/model_architecture.png)
+*Figure: YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.*
+
 
 ### Trainign Configuration
 
@@ -247,7 +250,7 @@ project/
 - **mAP@0.5**: Mean Average Precision at IoU 0.5
 - **mAP@0.5:0.95**: Averaged mAP across IoU thresholds 0.5 ~ 0.95
 - **Precision**: Correct detections among all predicted positives
-- **Recal**: Correct detections among all actual positives
+- **Recall**: Correct detections among all actual positives
 
 ## Results
 
