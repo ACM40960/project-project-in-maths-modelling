@@ -2,7 +2,19 @@
 
 ## Table of Contents
 
-
+1. [Abstract](#abstract)
+2. [Project Overview](#project-overview)
+3. [Installation](#installation)
+4. [Project Structure](#project-structure)
+5. [Methodology](#methodology)
+    - [Data Collection and Preprocessing](#data-collection-and-preprocessing)
+    - [Model Architecture](#model-architecture)
+    - [Training Configuration](#training-configuration)
+    - [Evaluation Metrics](#evaluation-metrics)
+6. [Results](#results)
+7. [Project Poster](#project-poster)
+8. [References](#references)
+9. [License](#license)
 
 ## Abstract
 
@@ -221,7 +233,7 @@ project/
 
 - **Preprocessing Steps**: 
 
-    Converted to YOLO format, split into train/val/test sets (70% / 10% / 20%), and generated data.yaml for YOLO training *(see [Installation – Step 4](#installation) for execution details)*.
+    Converted to YOLO format, split into train/val/test sets (70% / 10% / 20%), and generated `data.yaml` for YOLO training. *(see [Installation – Step 4](#installation) for execution details)*.
 
 ### Model Architecture
 
@@ -235,13 +247,13 @@ Full arthitecture definitions are available in:
 - [Head Models YAMLs](code/ultralytics_head/)
 
 <div align="center">
-  <img src="images/model_architecture.png" alt="Model Architecture" width="500">
+  <img src="images/model_architecture.png" alt="Model Architecture" width="600">
   
   <em>Figure: YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.</em>
 </div>
 
 
-### Trainign Configuration
+### Training Configuration
 
 - **Input Size**: 640 $\times$ 640
 - **Batch Size**: 16
@@ -260,14 +272,14 @@ Full arthitecture definitions are available in:
 ### Summary Table
 
 | Model Variant | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
-| ---- | ---- | ---- | ---- | ---- | 
-| Baseline YOLOv8n | 
-| Baseline YOLOv11n | 
-| YOLOv8n + OCCAPCC (end) |
-| YOLOv8n + OCCAPCC (index 6) | 
-| YOLOv8n + CBAM |  
-| YOLOv8n + OCCAPCC + Efficient3DBB | 
-| YOLOv8n + CBAM + Efficient3DBB | 
+| ---- | ----: | ----: | ----: | ----: | 
+| Baseline YOLOv8n | 0.9690 | 0.8478 | 0.9536 | 0.9090 | 
+| Baseline YOLOv11n | 0.9786 | 0.8621 | 0.9609 | 0.9537 | 
+| YOLOv8n + OCCAPCC (end) | 0.9194 | 0.7476 | 0.9074 | 0.8515 | 
+| YOLOv8n + OCCAPCC (index 6) | 0.9174 | 0.7500 | 0.8968 | 0.8334 | 
+| YOLOv8n + CBAM |  0.9405 | 0.7669 | 0.8842 | 0.8897 | 
+| YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
+| YOLOv8n + CBAM + Efficient3DBB | 0.9416 | 0.7739 | 0.9271 | 0.8931 | 
 
 
 ### Confusion Matrix
