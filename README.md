@@ -287,6 +287,22 @@ Full arthitecture definitions are available in:
 
 ### Precision-Recall Curves
 
+<div align="center">
+  <img src="images/PR_curve_v8baseline.png" alt="YOLOv8n PR Curve" width="250">
+  <img src="images/PR_curve_v11baseline.png" alt="YOLOv11n PR Curve" width="250">
+  <img src="images/PR_curve_v8+OCCAPCC(index6).png" alt="OCCAPCC (index 6) PR Curve" width="250">
+</div>
+
+<div align="center">
+  <img src="images/PR_curve_v8+OCCAPCC.png" alt="OCCAPCC (end) PR Curve" width="250">
+  <img src="images/PR_curve_v8+CBAM.png" alt="CBAM PR Curve" width="250">
+  <img src="images/PR_curve_v8+OCCAPCC+Eff.png" alt="OCCAPCC+Efficient3DBB PR Curve" width="250">
+</div>
+
+<div align="center">
+  <img src="images/PR_curve_v8+CBAM+Eff.png" alt="CBAM+Efficient3DBB PR Curve" width="250">
+</div>
+
 
 ### Prediction Examples
 
