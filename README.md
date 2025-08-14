@@ -179,7 +179,7 @@ We implement and evaluate the following model variants:
 
 6. Analyze results
 
-    Open `results/result.ipynb` to aggregate all JSON metrics into a comparison table.
+    Open [`results/result.ipynb`](results/result.ipynb) to aggregate all JSON metrics into a comparison table.
 
 ## Project Structure
 
