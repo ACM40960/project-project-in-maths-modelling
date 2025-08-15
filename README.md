@@ -360,4 +360,6 @@ See [Project_Poster.pdf](Project_Poster.pdf) for a visual summary of the project
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+- Original project code: **MIT License** (see [LICENSE](LICENSE))
+- Modified Ultralytics components (`code/ultralytics_attention/`, `code/ultralytics_head/`): **AGPL-3.0 License**  
+- A copy of AGPL-3.0 is included in the respective directories.  

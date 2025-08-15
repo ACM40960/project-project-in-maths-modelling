@@ -1,8 +1,7 @@
-MIT License
+MIT License with AGPL-3.0 Notice
 
 Copyright (c) 2025 Yanjie Shao
 Copyright (c) 2025 Ting-Yu Hsu
-
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,3 +20,23 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+====================================================================
+NOTICE REGARDING THIRD-PARTY CODE (ULTRALYTICS)
+====================================================================
+
+This repository contains modified portions of the Ultralytics project,
+which are licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+
+- Any files under `code/ultralytics_attention/` and `code/ultralytics_head/`
+  are based on Ultralytics source code and therefore remain subject to AGPL-3.0.
+- A copy of the AGPL-3.0 license is provided in those directories and at:
+  https://www.gnu.org/licenses/agpl-3.0.html
+
+Therefore:
+
+- Original code written for this project is licensed under the MIT License.
+- Portions derived from Ultralytics are licensed under AGPL-3.0.
+- When redistributing or deploying this repository, you must comply with
+  the terms of AGPL-3.0 for the relevant components.
