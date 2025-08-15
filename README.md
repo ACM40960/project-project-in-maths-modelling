@@ -313,60 +313,9 @@ Similar confusion matrices for other models can be found in the `results/*_val/`
 *Figure: Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom-right). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 6), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
 
 
-
-
-
-<table align="center">
-  <tr>
-    <td align="center">
-      <img src="images/PR_curve_v8baseline.png" width="250"><br>
-      標題1
-    </td>
-    <td align="center">
-      <img src="images/PR_curve_v11baseline.png" width="250"><br>
-      標題2
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="images/PR_curve_v8+OCCAPCC(index6).png" width="250"><br>
-      標題3
-    </td>
-    <td align="center">
-      <img src="images/PR_curve_v8+OCCAPCC.png" width="250"><br>
-      標題4
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="images/PR_curve_v8+CBAM.png" width="250"><br>
-      標題5
-    </td>
-    <td align="center">
-      <img src="images/PR_curve_v8+OCCAPCC+Eff.png" width="250"><br>
-      標題6
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="images/PR_curve_v8+CBAM+Eff.png" width="250"><br>
-      標題7
-    </td>
-    <td align="center">
-      <img src="images/img8.png" width="250"><br>
-      標題8
-    </td>
-  </tr>
-</table>
-
-
-
-
-
-
 ### Prediction Examples
 
-
+![](images/pred_examples.png)
 
 ## Project Poster
 
