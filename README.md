@@ -291,16 +291,26 @@ Full arthitecture definitions are available in:
 
 YOLOv11n achieved the highest scores across all metrics. Among the YOLOv8n variants, the combination of CBAM and Efficient3DBB performed best. 
 
+For the OCCAPCC-based models: 
+
+- v8 + OCCAPCC: mAP slightly decreased, but recall improved in low-light cases. 
+- v8 + OCCAPCC + Efficient3DBB: mAP recovered to 0.9336 and recall further increased to 0.8641, showing better overall performance than OCCAPCC alone. 
+
 
 ### Confusion Matrix
 
 <div align="center">
-  <img src="images/cm_norm_v8+CBAM+Eff.png" alt="Normalized Confusion Matrix - YOLOv8n + CBAM + Efficient3DBB" width="600">
+  <img src="images/cm_norm_v8+OCCAPCC+Eff.png" alt="Normalized Confusion Matrix - YOLOv8n + CBAM + Efficient3DBB" width="600">
   
-  <em>Figure: Normalized confusion matrix for YOLOv8n with CBAM attention and Efficient3DBB.</em>
+  <em>Figure: Normalized confusion matrix for YOLOv8n with OCCAPCC attention and Efficient3DBB detection head.</em>
 </div>
 
-Similar confusion matrices for other models can be found in the `results/*_val/` directories. 
+The normalized confusion matrix highlights the strengths and weakness of the **v8 + OCCAPCC + Efficient3DBB** model: 
+
+- **High accuracy (>0.9)** for large high-contrast species such as *AmurTiger*, *BlackBear*, and *WildBoar*, indicating stable recognition. 
+- **Low accuracies** observed for *Dog (0.31)* and *Y.T.Marten (0.69)*. 
+
+Similar confusion matrices for other models can be found in the [`results/*_val/`](results/) directories. 
 
 
 ### Precision-Recall Curves
@@ -310,12 +320,24 @@ Similar confusion matrices for other models can be found in the `results/*_val/`
 ![](images/PR_curve3.png)
 ![](images/PR_curve4.png)
 
-*Figure: Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom-right). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 6), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
+*Figure: Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 6), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
+
+
+- **Improved classes**: *BlackBear* and *WildBoar* consistently improved across all enhanced models. *Cow* improved in both attention-based variants, but the gain disappeared when the Efficient3DBB head was added. 
+- **Degraded classes**: *Dog* performed worse in all enhanced models compared to the baseline, though the addition of Efficient3DBB partially mitigated the drop. 
+- **Stable classes**: Large, high-contrast species such as *AmurTiger*, *Leopard*, and *MuskDeer* remained stable across all variants.
+
+For additional metrics such as **F1-score**, **Precision**, **Recall** curves, please refer to the files in the [`results/*_val/`](results/) directories. 
 
 
 ### Prediction Examples
 
 ![](images/pred_examples.png)
+
+*Figure: Prediction examples on a sample BlackBear image*
+
+The prediction examples below compared detection results for different model variants on a sample *BlackBear* image. In this case, the baseline YOLOv8n (top-left) produces duplicate bounding boxes with low confidence scores. After adding attention, or attention combined with the custom detection head, the duplicate boxes are removed and confidence scores increase. This highlights the effectiveness of combining attention with a specialized detection head.
+
 
 ## Project Poster
 
