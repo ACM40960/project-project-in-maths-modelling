@@ -231,7 +231,7 @@ project/
 <div align="center">
   <img src="images/NTLNP_examples.png" alt="Example Images in NTLNP/voc_night" width="600">
   
-  <em>Figure: Example images in NTLNP/voc_night.</em>
+  <em>Figure 1. Example images in NTLNP/voc_night.</em>
 </div>
 
 - **Annotation Format**: 
@@ -253,10 +253,41 @@ Full architecture definitions are available in:
 - [Attention Models YAMLs](code/ultralytics_attention/)
 - [Head Models YAMLs](code/ultralytics_head/)
 
+#### Rationale for Modifications
+
+- **Base Model**: 
+
+    The baseline model is YOLOv8n, a lightweight object detection architecture from the Ultralitics framework. We selected it due to its efficiency and low computational cost, which has made it widely adopted in real-time applications such as wildlife monitoring and other resource-constrained scenarios. 
+
+- **YOLOv11n**: 
+
+    YOLOv11n is an improved version officially released by Ultralytics in 2024. Compared to YOLOv8n, it introduces more efficient building blocks such as `c3k2` and `C2PSA`, and replaces the standard detection head with `YOLOEDetect`. These changes allow YOLOv11n to achieve better accuracy with fewer parameters and lower computational cost. 
+
+- **Attention Modules**: 
+
+    - **OCCAPCC** (appended at the end of the backbone): 
+
+        This module is added at the end of the backbone, to refine high-level semantic features before passing them to the detection head. The rationale is that global context and fine-grained spatial cues extracted by OCCAPCC may help improve detection performance in low-contrast, cluttered scenes scenes typical of night-time infrared images. Based on findings from Wang et al., 2024, placing the attention module at the end of the backbone achieves the best performance in low-light conditions.
+
+    - **OCCAPCC** (inserted at layer 8): 
+
+        In a separate experiment, OCCAPCC is placed mid-backbone (at index 6) to assess whether earlier feature enhancement leads to better representations. This positioning helps evaluate how the depth of attention integration affects model performance. 
+
+    - **CBAM** (inserted before SPPF): 
+
+        CBAM is placed before SPPF block to enhance deep semantic features before multi-scale pooling. This position allows CBAM to operate on rich, uncompressed feature maps, improving channel and spetial attention. According to Woo et al., 2018, CBAM is most effective when applied after backbone blocks. Placing it before SPPF alighs with this recommentation and avoids disrupting the output used by the neck. 
+
+- **Detection Head**: 
+
+    - **Efficient3DBB Head**: 
+
+        Efficient3DBB head replaces YOLOv8 head with diverse-branch block, improving multi-scale fusion and stabilising logits, reducing duplicate boxes. 
+
+<br>
 <div align="center">
   <img src="images/model_architecture.png" alt="Model Architecture" width="600">
   
-  <em>Figure: YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.</em>
+  <em>Figure 2. YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.</em>
 </div>
 
 
@@ -290,23 +321,13 @@ Full architecture definitions are available in:
 | YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
 | YOLOv8n + CBAM + Efficient3DBB | **0.9416** | **0.7739** | **0.9271** | **0.8931** | 
 
-| Model Variant | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
-| ---- | ----: | ----: | ----: | ----: | 
-| Baseline YOLOv8n | 0.9690 | 0.8478 | 0.9536 | 0.9090 | 
-| Baseline YOLOv11n | 0.9786 | 0.8621 | 0.9609 | 0.9537 | 
-| YOLOv8n + OCCAPCC (end) | 0.9194 | 0.7476 | 0.9074 | 0.8515 | 
-| YOLOv8n + OCCAPCC (index 8) | 0.9174 | 0.7500 | 0.8968 | 0.8334 | 
-| YOLOv8n + CBAM |  0.9405 | 0.7669 | 0.8842 | 0.8897 | 
-| YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
-| YOLOv8n + CBAM + Efficient3DBB | 0.9416 | 0.7739 | 0.9271 | 0.8931 | 
-
 YOLOv11n achieved the highest scores across all metrics (bold in Table 1). Within the YOLOv8n variants, **YOLOv8n + CBAM + Efficient3DBB** obtained the best results (also highlighted in bold), outperforming other YOLOv8n modifications in mAP, precision, and recall.
 
 
 For the OCCAPCC-based models: 
 
-- v8 + OCCAPCC: mAP slightly decreased, but recall improved in low-light cases. 
-- v8 + OCCAPCC + Efficient3DBB: mAP recovered to 0.9336 and recall further increased to 0.8641, showing better overall performance than OCCAPCC alone. 
+- **v8 + OCCAPCC**: mAP slightly decreased, but recall improved in low-light cases. 
+- **v8 + OCCAPCC + Efficient3DBB**: mAP recovered to 0.9336 and recall further increased to 0.8641, showing better overall performance than OCCAPCC alone. 
 
 
 ### Confusion Matrix
@@ -314,7 +335,7 @@ For the OCCAPCC-based models:
 <div align="center">
   <img src="images/cm_norm_v8+OCCAPCC+Eff.png" alt="Normalized Confusion Matrix - YOLOv8n + OCCAPCC + Efficient3DBB" width="600">
   
-  <em>Figure: Normalized confusion matrix for YOLOv8n with OCCAPCC attention and Efficient3DBB detection head.</em>
+  <em>Figure 3. Normalized confusion matrix for YOLOv8n with OCCAPCC attention and Efficient3DBB detection head.</em>
 </div>
 
 The normalized confusion matrix highlights the strengths and weaknesses of the **v8 + OCCAPCC + Efficient3DBB** model: 
@@ -332,7 +353,7 @@ Similar confusion matrices for other models can be found in the [`results/*_val/
 ![](images/PR_curve3.png)
 ![](images/PR_curve4.png)
 
-*Figure: Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 8), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
+*Figure 4. Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 8), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
 
 
 - **Improved classes**: *BlackBear* and *WildBoar* consistently improved across all enhanced models. *Cow* improved in both attention-based variants, but the gain disappeared when the Efficient3DBB head was added. 
@@ -346,7 +367,7 @@ For additional metrics such as **F1-score**, **Precision**, **Recall** curves, p
 
 ![](images/pred_examples.png)
 
-*Figure: Prediction examples on a sample BlackBear image. The top-left shows the YOLOv8n baseline, which produces duplicate bounding boxes with lower confidence. In contrast, attention-based variants and those with the Efficient3DBB head (other panels) suppress duplicates and increase confidence scores.*
+*Figure 5. Prediction examples on a sample BlackBear image. The top-left shows the YOLOv8n baseline, which produces duplicate bounding boxes with lower confidence. In contrast, attention-based variants and those with the Efficient3DBB head (other panels) suppress duplicates and increase confidence scores.*
 
 The prediction examples below compared detection results for different model variants on a sample *BlackBear* image. In this case, the baseline YOLOv8n (top-left) produces duplicate bounding boxes with low confidence scores. After adding attention, or attention combined with the custom detection head, the duplicate boxes are removed and confidence scores increase. This highlights the effectiveness of combining attention with a specialized detection head.
 
