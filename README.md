@@ -38,8 +38,8 @@ Results show class-dependent improvements, notably for some onw-contrast species
 
 We implement and evaluate the following baseline models and YOLOv8n-based variants: 
 
-1. **YOLOv8n**: Baseline model provided by Ultralytics
-2. **YOLOv11n**: Baseline model provided by Ultralytics
+1. **YOLOv8n**: Baseline model provided by [Ultralytics](https://github.com/ultralytics/ultralytics)
+2. **YOLOv11n**: Baseline model provided by [Ultralytics](https://github.com/ultralytics/ultralytics)
 3. **YOLOv8n + OCCAPCC(end)**: OCCAPCC attention module appended at the end of the backbone
 4. **YOLOv8n + OCCAPCC(index 8)**: OCCAPCC inserted at backbone layer 8
 5. **YOLOv8n + CBAM**: CBAM module used instead of OCCAPCC
@@ -278,7 +278,7 @@ Full architecture definitions are available in:
 
     - **OCCAPCC** (appended at the end of the backbone): 
 
-        This module is added at the end of the backbone, to refine high-level semantic features before passing them to the detection head. The rationale is that global context and fine-grained spatial cues extracted by OCCAPCC may help improve detection performance in low-contrast, cluttered scenes scenes typical of night-time infrared images. Based on findings from Wang et al., 2024, placing the attention module at the end of the backbone achieves the best performance in low-light conditions.
+        This module is added at the end of the backbone, to refine high-level semantic features before passing them to the detection head. The rationale is that global context and fine-grained spatial cues extracted by OCCAPCC may help improve detection performance in low-contrast, cluttered scenes scenes typical of night-time infrared images. Based on findings from [Wang et al., 2024](https://doi.org/10.1049/ell2.13305), placing the attention module at the end of the backbone achieves the best performance in low-light conditions.
 
     - **OCCAPCC** (inserted at layer 8): 
 
@@ -286,13 +286,13 @@ Full architecture definitions are available in:
 
     - **CBAM** (inserted before SPPF): 
 
-        CBAM is placed before SPPF block to enhance deep semantic features before multi-scale pooling. This position allows CBAM to operate on rich, uncompressed feature maps, improving channel and spetial attention. According to Woo et al., 2018, CBAM is most effective when applied after backbone blocks. Placing it before SPPF alighs with this recommentation and avoids disrupting the output used by the neck. 
+        CBAM is placed before SPPF block to enhance deep semantic features before multi-scale pooling. This position allows CBAM to operate on rich, uncompressed feature maps, improving channel and spetial attention. According to [Woo et al., 2018](https://doi.org/10.48550/arXiv.1807.06521), CBAM is most effective when applied after backbone blocks. Placing it before SPPF alighs with this recommentation and avoids disrupting the output used by the neck. 
 
 - **Detection Head**: 
 
     - **Efficient3DBB Head**: 
 
-        Efficient3DBB head replaces YOLOv8 head with diverse-branch block, improving multi-scale fusion and stabilising logits, reducing duplicate boxes. 
+        [Efficient3DBB](https://github.com/wandahangFY/YOLO-MIF) head replaces YOLOv8 head with diverse-branch block, improving multi-scale fusion and stabilising logits, reducing duplicate boxes. 
 
 <br>
 <div align="center">
