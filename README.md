@@ -22,6 +22,8 @@ Accurate recognition of wildlife in their natural habitats is essential for ecol
 
 This project explores architectural modifications to the YOLOv8 object detection model for improved performance on infrared wildlife images captured at night. Specifically, we investigate whether integrating attention mechanisms (OCCAPCC, CBAM) and a custom detection head (Efficient3DBB) can enhance detection accuracy under low-light conditions. We evaluate multiple variants, including YOLOv8n and YOLOv11n baselines, under the same training settings. 
 
+Results show class-dependent improvements, notably for some onw-contrast species (e.g., *BlackBear* and *WildBoar*), but no uniform gains across all classes. Efficient3DBB helps partially recover performance when combined with OCCAPCC, yet overall results remian below the YOLOv8 baseline. In contrast, backbone upgrades (e.g., YOLOv11n) deliver the most consistent improvement, with YOLOv11n achieving the best overall performance. 
+
 
 ## Project Overview
 
@@ -314,12 +316,12 @@ Full architecture definitions are available in:
 | Model Variant | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
 | ---- | ----: | ----: | ----: | ----: | 
 | Baseline YOLOv8n | 0.9690 | 0.8478 | 0.9536 | 0.9090 | 
-| Baseline YOLOv11n | **0.9786** | **0.8621** | **0.9609** | **0.9537** | 
+| **Baseline YOLOv11n** | **0.9786** | **0.8621** | **0.9609** | **0.9537** | 
 | YOLOv8n + OCCAPCC (end) | 0.9194 | 0.7476 | 0.9074 | 0.8515 | 
 | YOLOv8n + OCCAPCC (index 8) | 0.9174 | 0.7500 | 0.8968 | 0.8334 | 
 | YOLOv8n + CBAM |  0.9405 | 0.7669 | 0.8842 | 0.8897 | 
 | YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
-| YOLOv8n + CBAM + Efficient3DBB | **0.9416** | **0.7739** | **0.9271** | **0.8931** | 
+| **YOLOv8n + CBAM + Efficient3DBB** | **0.9416** | **0.7739** | **0.9271** | **0.8931** | 
 
 YOLOv11n achieved the highest scores across all metrics (bold in Table 1). Within the YOLOv8n variants, **YOLOv8n + CBAM + Efficient3DBB** obtained the best results (also highlighted in bold), outperforming other YOLOv8n modifications in mAP, precision, and recall.
 
