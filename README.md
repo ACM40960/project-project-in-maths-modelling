@@ -350,12 +350,11 @@ Similar confusion matrices for other models can be found in the [`results/*_val/
 
 ### Precision-Recall Curves
 
-![](images/PR_curve1.png)
-![](images/PR_curve2.png)
-![](images/PR_curve3.png)
-![](images/PR_curve4.png)
-
-*Figure 4. Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 8), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
+<div align="center">
+  <img src="images/PR_curves.png" alt="Precision-Recall curves for seven models." width="600">
+  
+  <em>Figure 4. Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 8), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.</em>
+</div>
 
 
 - **Improved classes**: *BlackBear* and *WildBoar* consistently improved across all enhanced models. *Cow* improved in both attention-based variants, but the gain disappeared when the Efficient3DBB head was added. 
@@ -367,9 +366,11 @@ For additional metrics such as **F1-score**, **Precision**, **Recall** curves, p
 
 ### Prediction Examples
 
-![](images/pred_examples.png)
-
-*Figure 5. Prediction examples on a sample BlackBear image. The top-left shows the YOLOv8n baseline, which produces duplicate bounding boxes with lower confidence. In contrast, attention-based variants and those with the Efficient3DBB head (other panels) suppress duplicates and increase confidence scores.*
+<div align="center">
+  <img src="images/pred_examples.png" alt="Prediction examples on a sample BlackBear image." width="600">
+  
+  <em>Figure 5. Prediction examples on a sample BlackBear image. The top-left shows the YOLOv8n baseline, which produces duplicate bounding boxes with lower confidence. In contrast, attention-based variants and those with the Efficient3DBB head (other panels) suppress duplicates and increase confidence scores.</em>
+</div>
 
 The prediction examples below compared detection results for different model variants on a sample *BlackBear* image. In this case, the baseline YOLOv8n (top-left) produces duplicate bounding boxes with low confidence scores. After adding attention, or attention combined with the custom detection head, the duplicate boxes are removed and confidence scores increase. This highlights the effectiveness of combining attention with a specialized detection head.
 
