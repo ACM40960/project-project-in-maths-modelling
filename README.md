@@ -285,7 +285,7 @@ Full architecture definitions are available in:
 | Baseline YOLOv8n | 0.9690 | 0.8478 | 0.9536 | 0.9090 | 
 | Baseline YOLOv11n | **0.9786** | **0.8621** | **0.9609** | **0.9537** | 
 | YOLOv8n + OCCAPCC (end) | 0.9194 | 0.7476 | 0.9074 | 0.8515 | 
-| YOLOv8n + OCCAPCC (index 6) | 0.9174 | 0.7500 | 0.8968 | 0.8334 | 
+| YOLOv8n + OCCAPCC (index 8) | 0.9174 | 0.7500 | 0.8968 | 0.8334 | 
 | YOLOv8n + CBAM |  0.9405 | 0.7669 | 0.8842 | 0.8897 | 
 | YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
 | YOLOv8n + CBAM + Efficient3DBB | **0.9416** | **0.7739** | **0.9271** | **0.8931** | 
