@@ -11,9 +11,9 @@ models_info = {
         'init_weights': 'ultralytics_attention/yolov8+OCCAPCC.yaml', 
         'save_path': os.path.join(model_save_path, 'yolov8+OCCAPCC_best.pt')
     }, 
-    'v8+OCCAPCC_index6': {
-        'init_weights': 'ultralytics_attention/yolov8+OCCAPCC_index6.yaml', 
-        'save_path': os.path.join(model_save_path, 'yolov8+OCCAPCC_index6_best.pt')
+    'v8+OCCAPCC_index8': {
+        'init_weights': 'ultralytics_attention/yolov8+OCCAPCC_index8.yaml', 
+        'save_path': os.path.join(model_save_path, 'yolov8+OCCAPCC_index8_best.pt')
     }, 
     'v8+CBAM': {
         'init_weights': 'ultralytics_attention/yolov8+CBAM.yaml', 

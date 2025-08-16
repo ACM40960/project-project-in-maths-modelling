@@ -10,7 +10,7 @@ do_pred = True  # whether to run predict
 # model informations 
 models_info = {
     'v8+OCCAPCC': '../results/saved_models/yolov8+OCCAPCC_best.pt', 
-    'v8+OCCAPCC(index6)': '../results/saved_models/yolov8+OCCAPCC_index6_best.pt',
+    'v8+OCCAPCC(index8)': '../results/saved_models/yolov8+OCCAPCC_index8_best.pt',
     'v8+CBAM': '../results/saved_models/yolov8+CBAM_best.pt'
 }
 

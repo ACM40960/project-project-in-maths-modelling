@@ -1,5 +1,5 @@
 {
-    "model": "v8+OCCAPCC(index6)",
+    "model": "v8+OCCAPCC(index8)",
     "mAP50": 0.9174,
     "mAP50_95": 0.75,
     "precision": 0.8968,

@@ -30,7 +30,7 @@ We implement and evaluate the following model variants:
 1. **YOLOv8n**: Baseline model provided by Ultralytics
 2. **YOLOv11n**: Baseline model provided by Ultralytics
 3. **YOLOv8n + OCCAPCC(end)**: OCCAPCC attention module appended at the end of the backbone
-4. **YOLOv8n + OCCAPCC(index 6)**: OCCAPCC inserted at backbone layer 6
+4. **YOLOv8n + OCCAPCC(index 8)**: OCCAPCC inserted at backbone layer 8
 5. **YOLOv8n + CBAM**: CBAM module used instead of OCCAPCC
 6. **YOLOv8n + OCCAPCC + Efficient3DBB**: Combines OCCAPCC with a custom detection head Efficient3DBB
 7. **YOLOv8n + CBAM + Efficient3DBB**: Combines CBAM with Efficient3DBB head
@@ -190,7 +190,7 @@ project/
 │   │   ├── ultralytics/                        # Ultralytics source code (attention version) 
 │   │   ├── ...                                 # other supporting files 
 │   │   ├── yolov8+OCCAPCC.yaml                 # YOLO config with OCCAPCC at backbone end
-│   │   ├── yolov8+OCCAPCC_index6.yaml          # YOLO config with OCCAPCC at backbone layer 6 
+│   │   ├── yolov8+OCCAPCC_index8.yaml          # YOLO config with OCCAPCC at backbone layer 8 
 │   │   └── yolov8+CBAM.yaml                    # YOLO config with CBAM 
 │   ├── ultralytics_head/                       # modified Ultralytics with custom detect head
 │   │   ├── ultralytics/                        # Ultralytics source code (head version)
@@ -245,7 +245,7 @@ project/
 ### Model Architecture
 
 - **Baselines**: YOLOv8n, YOLOv11n (official Ultralytics)
-- **Attention Models**: YOLOv8n with OCCAPCC (end / index 6) or CBAM
+- **Attention Models**: YOLOv8n with OCCAPCC (end / index 8) or CBAM
 - **Head Models**: YOLOv8n with OCCAPCC or CBAM combined with Efficient3DBB
 
 Full architecture definitions are available in: 
@@ -290,6 +290,16 @@ Full architecture definitions are available in:
 | YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
 | YOLOv8n + CBAM + Efficient3DBB | **0.9416** | **0.7739** | **0.9271** | **0.8931** | 
 
+| Model Variant | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
+| ---- | ----: | ----: | ----: | ----: | 
+| Baseline YOLOv8n | 0.9690 | 0.8478 | 0.9536 | 0.9090 | 
+| Baseline YOLOv11n | 0.9786 | 0.8621 | 0.9609 | 0.9537 | 
+| YOLOv8n + OCCAPCC (end) | 0.9194 | 0.7476 | 0.9074 | 0.8515 | 
+| YOLOv8n + OCCAPCC (index 8) | 0.9174 | 0.7500 | 0.8968 | 0.8334 | 
+| YOLOv8n + CBAM |  0.9405 | 0.7669 | 0.8842 | 0.8897 | 
+| YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
+| YOLOv8n + CBAM + Efficient3DBB | 0.9416 | 0.7739 | 0.9271 | 0.8931 | 
+
 YOLOv11n achieved the highest scores across all metrics (bold in Table 1). Within the YOLOv8n variants, **YOLOv8n + CBAM + Efficient3DBB** obtained the best results (also highlighted in bold), outperforming other YOLOv8n modifications in mAP, precision, and recall.
 
 
@@ -322,7 +332,7 @@ Similar confusion matrices for other models can be found in the [`results/*_val/
 ![](images/PR_curve3.png)
 ![](images/PR_curve4.png)
 
-*Figure: Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 6), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
+*Figure: Precision-Recall curves for seven models, arranged in two columns and four rows in reading order (top-left → top-right → ... → bottom). The models, in order, are YOLOv8n, YOLOv11n, YOLOv8n + OCCAPCC (end), YOLOv8n + OCCAPCC (index 8), YOLOv8n + CBAM, YOLOv8n + OCCAPCC + Efficient3DBB, and YOLOv8n + CBAM + Efficient3DBB.*
 
 
 - **Improved classes**: *BlackBear* and *WildBoar* consistently improved across all enhanced models. *Cow* improved in both attention-based variants, but the gain disappeared when the Efficient3DBB head was added. 
