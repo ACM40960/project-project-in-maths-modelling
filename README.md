@@ -1,5 +1,15 @@
 # Night-time Wildlife Detection using YOLOv8 with Attention Modules and Custom Head
 
+![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Ultralytics](https://img.shields.io/badge/ultralytics-8.0.114-green.svg)
+![PyTorch](https://img.shields.io/badge/pytorch-2.0.1-red.svg)
+
+![Platform](https://img.shields.io/badge/platform-Linux-blue.svg)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) 
+![License: AGPL--3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)
+![Status](https://img.shields.io/badge/status-Completed-brightgreen.svg)
+
+
 ## Table of Contents
 
 1. [Abstract](#abstract)
@@ -392,6 +402,11 @@ See [Poster.pdf](Poster.pdf) for a visual summary of the project.
 [4] Sanghyun Woo, Jongchan Park, Joon-Young Lee, In So Kweon. *CBAM: Convolutional Block Attention Module*. arXiv:1807.06521 [cs.CV], 2018. [https://doi.org/10.48550/arXiv.1807.06521](https://doi.org/10.48550/arXiv.1807.06521)
 
 [5] Wan, D., Lu, R., Hu, B., Yin, J., Shen, S., Xu, T., & Lang, X. (2024). *YOLO-MIF: Improved YOLOv8 with Multi-Information fusion for object detection in gray-scale images.* Advanced Engineering Informatics, 62(B), 102709. [https://doi.org/10.1016/j.aei.2024.102709](https://doi.org/10.1016/j.aei.2024.102709)
+
+
+# Contributors
+
+This project was developed by [Ting-Yu Hsu](https://github.com/rye1014) and [Yanjie Shao](https://github.com/YanjieShao) as part of the MSc Data and Computational Science programme at UCD.
 
 
 ## License
