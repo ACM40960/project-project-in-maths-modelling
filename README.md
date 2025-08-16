@@ -3,7 +3,6 @@
 ![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![Ultralytics](https://img.shields.io/badge/ultralytics-8.0.114-green.svg)
 ![PyTorch](https://img.shields.io/badge/pytorch-2.0.1-red.svg)
-
 ![Platform](https://img.shields.io/badge/platform-Linux-blue.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg) 
 ![License: AGPL--3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)
