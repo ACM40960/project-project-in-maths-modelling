@@ -32,7 +32,7 @@ We implement and evaluate the following model variants:
 3. **YOLOv8n + OCCAPCC(end)**: OCCAPCC attention module appended at the end of the backbone
 4. **YOLOv8n + OCCAPCC(index 8)**: OCCAPCC inserted at backbone layer 8
 5. **YOLOv8n + CBAM**: CBAM module used instead of OCCAPCC
-6. **YOLOv8n + OCCAPCC + Efficient3DBB**: Combines OCCAPCC with a custom detection head Efficient3DBB
+6. **YOLOv8n + OCCAPCC + Efficient3DBB**: Combines OCCAPCC at the end of the backbone with a custom detection head Efficient3DBB
 7. **YOLOv8n + CBAM + Efficient3DBB**: Combines CBAM with Efficient3DBB head
 
 
@@ -250,8 +250,8 @@ project/
 
 Full architecture definitions are available in: 
 
-- [Attention Models YAMLs](code/ultralytics_attention/)
-- [Head Models YAMLs](code/ultralytics_head/)
+- [Attention Models YAMLs](code/ultralytics_attention/) (`yolov8+OCCAPCC.yaml`, `yolov8+OCCAPCC_index8.yaml`, and `yolov8+CBAM.yaml`)
+- [Head Models YAMLs](code/ultralytics_head/) (`yolov8+OCCAPCC+Efficient3dbb.yaml` and `yolov8+CBAM+Efficient3dbb.yaml`)
 
 #### Rationale for Modifications
 
@@ -271,7 +271,7 @@ Full architecture definitions are available in:
 
     - **OCCAPCC** (inserted at layer 8): 
 
-        In a separate experiment, OCCAPCC is placed mid-backbone (at index 6) to assess whether earlier feature enhancement leads to better representations. This positioning helps evaluate how the depth of attention integration affects model performance. 
+        In a separate experiment, OCCAPCC is placed mid-backbone (at index 8) to assess whether earlier feature enhancement leads to better representations. This positioning helps evaluate how the depth of attention integration affects model performance. 
 
     - **CBAM** (inserted before SPPF): 
 
@@ -287,7 +287,7 @@ Full architecture definitions are available in:
 <div align="center">
   <img src="images/model_architecture.png" alt="Model Architecture" width="600">
   
-  <em>Figure 2. YOLOv8n backbone with OCCAPCC attention and Efficient3DBB detection head.</em>
+  <em>Figure 2. YOLOv8n backbone with OCCAPCC attention at the end of the backbone and Efficient3DBB detection head.</em>
 </div>
 
 
@@ -335,7 +335,7 @@ For the OCCAPCC-based models:
 <div align="center">
   <img src="images/cm_norm_v8+OCCAPCC+Eff.png" alt="Normalized Confusion Matrix - YOLOv8n + OCCAPCC + Efficient3DBB" width="600">
   
-  <em>Figure 3. Normalized confusion matrix for YOLOv8n with OCCAPCC attention and Efficient3DBB detection head.</em>
+  <em>Figure 3. Normalized confusion matrix for YOLOv8n with OCCAPCC attention at the end of the backbone and Efficient3DBB detection head.</em>
 </div>
 
 The normalized confusion matrix highlights the strengths and weaknesses of the **v8 + OCCAPCC + Efficient3DBB** model: 
