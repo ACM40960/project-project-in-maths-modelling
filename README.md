@@ -29,14 +29,14 @@
 
 Accurate recognition of wildlife in their natural habitats is essential for ecological research and biodiversity conservation. While object detection models such as YOLO perform well on well-lit, high-resolution datasets, their performance often degrades in low-light environments or infrared camera settings, which are common in real-world field monitoring. 
 
-This project explores architectural modifications to the YOLOv8 object detection model for improved performance on infrared wildlife images captured at night. Specifically, we investigate whether integrating attention mechanisms (OCCAPCC, CBAM) and a custom detection head (Efficient3DBB) can enhance detection accuracy under low-light conditions. We evaluate multiple variants, including YOLOv8n and YOLOv11n baselines, under the same training settings. 
+This project explores architectural modifications to the YOLOv8 object detection model for improved performance on infrared wildlife images captured at night. Specifically, we investigate whether integrating attention mechanisms (OCCAPCC, CBAM) and a custom detection head (Efficient3DBB) can enhance detection accuracy under low-light conditions. We evaluate multiple models, including YOLOv8n and YOLOv11n baselines and YOLOv8n-based variants, under the same training settings. 
 
 Results show class-dependent improvements, notably for some onw-contrast species (e.g., *BlackBear* and *WildBoar*), but no uniform gains across all classes. Efficient3DBB helps partially recover performance when combined with OCCAPCC, yet overall results remian below the YOLOv8 baseline. In contrast, backbone upgrades (e.g., YOLOv11n) deliver the most consistent improvement, with YOLOv11n achieving the best overall performance. 
 
 
 ## Project Overview
 
-We implement and evaluate the following model variants: 
+We implement and evaluate the following baseline models and YOLOv8n-based variants: 
 
 1. **YOLOv8n**: Baseline model provided by Ultralytics
 2. **YOLOv11n**: Baseline model provided by Ultralytics
@@ -320,9 +320,9 @@ Full architecture definitions are available in:
 
 ### Summary Table 
 
-*Table 1. Performance of different YOLO model variants on the test set, evaluated by mAP@0.5, mAP@0.5:0.95, precision, and recall.*
+*Table 1. Performance of different YOLO models and variants on the test set, evaluated by mAP@0.5, mAP@0.5:0.95, precision, and recall.*
 
-| Model Variant | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
+| Model Name | mAP@0.5 | mAP@0.5:0.95 | Precision | Recall | 
 | ---- | ----: | ----: | ----: | ----: | 
 | Baseline YOLOv8n | 0.9690 | 0.8478 | 0.9536 | 0.9090 | 
 | **Baseline YOLOv11n** | **0.9786** | **0.8621** | **0.9609** | **0.9537** | 
@@ -332,13 +332,7 @@ Full architecture definitions are available in:
 | YOLOv8n + OCCAPCC + Efficient3DBB | 0.9336 | 0.7657 | 0.9131 | 0.8641 | 
 | **YOLOv8n + CBAM + Efficient3DBB** | **0.9416** | **0.7739** | **0.9271** | **0.8931** | 
 
-YOLOv11n achieved the highest scores across all metrics (bold in Table 1). Within the YOLOv8n variants, **YOLOv8n + CBAM + Efficient3DBB** obtained the best results (also highlighted in bold), outperforming other YOLOv8n modifications in mAP, precision, and recall.
-
-
-For the OCCAPCC-based models: 
-
-- **v8 + OCCAPCC**: mAP slightly decreased, but recall improved in low-light cases. 
-- **v8 + OCCAPCC + Efficient3DBB**: mAP recovered to 0.9336 and recall further increased to 0.8641, showing better overall performance than OCCAPCC alone. 
+YOLOv11n achieved the highest scores across all metrics (bold in Table 1), followed by YOLOv8n. Within the YOLOv8n-based variants, the variants with CBAM as the added attention module outperform the variants with OCCAPCC as the added attention module overall, and the variants with Efficient3DBB outperform the variants with the original detection head overall. In other words, **YOLOv8n + CBAM + Efficient3DBB** obtained the best results (also highlighted in bold), outperforming other YOLOv8n-based variants in mAP, precision, and recall.
 
 
 ### Confusion Matrix
@@ -349,10 +343,11 @@ For the OCCAPCC-based models:
   <em>Figure 3. Normalized confusion matrix for YOLOv8n with OCCAPCC attention at the end of the backbone and Efficient3DBB detection head.</em>
 </div>
 
-The normalized confusion matrix highlights the strengths and weaknesses of the **v8 + OCCAPCC + Efficient3DBB** model: 
+The normalized confusion matrix highlights the strengths and weaknesses of the **YOLOv8 + OCCAPCC + Efficient3DBB** model (Columns = true classes; diagonal = per-class recall): 
 
-- **High accuracy (>0.9)** for large high-contrast species such as *AmurTiger*, *BlackBear*, and *WildBoar*, indicating stable recognition. 
-- **Low accuracies** observed for *Dog (0.31)* and *Y.T.Marten (0.69)*. 
+- **High recall (>0.9)**: e.g. *AmurTiger*, *BlackBear*, *Leopard*, *MuskDeer*, *WildBoar* - reliably detected when present.
+- **Low recall**: e.g. *Dog*, *Y.T.Marten* - more prone to misclassification.
+- Off-diagonal entries show main misclassification targets; high "background" values = missed detections.
 
 Similar confusion matrices for other models can be found in the [`results/*_val/`](results/) directories. 
 
@@ -366,9 +361,9 @@ Similar confusion matrices for other models can be found in the [`results/*_val/
 </div>
 
 
-- **Improved classes**: *BlackBear* and *WildBoar* consistently improved across all enhanced models. *Cow* improved in both attention-based variants, but the gain disappeared when the Efficient3DBB head was added. 
-- **Degraded classes**: *Dog* performed worse in all enhanced models compared to the baseline, though the addition of Efficient3DBB partially mitigated the drop. 
-- **Stable classes**: Large, high-contrast species such as *AmurTiger*, *Leopard*, and *MuskDeer* remained stable across all variants.
+- **Improved classes**: *BlackBear* and *WildBoar* consistently improved across all YOLOv8n-based variants and YOLOv11n (compared to YOLOv8n). *Cow* improved in both attention-based variants, but the gain disappeared when the Efficient3DBB head was added. 
+- **Degraded classes**: *Dog* and *Y.T.Marten* performed worse in all YOLOv8n-based variants compared to the baseline models, though the addition of Efficient3DBB partially mitigated the drop in *Dog*.
+- Most species (e.g., *AmurTiger*, *Leopard*, *MuskDeer*) still remain high in all variants with only minor fluctuations.
 
 For additional metrics such as **F1-score**, **Precision**, **Recall** curves, please refer to the files in the [`results/*_val/`](results/) directories. 
 
@@ -381,7 +376,7 @@ For additional metrics such as **F1-score**, **Precision**, **Recall** curves, p
   <em>Figure 5. Prediction examples on a sample BlackBear image. The top-left shows the YOLOv8n baseline, which produces duplicate bounding boxes with lower confidence. In contrast, attention-based variants and those with the Efficient3DBB head (other panels) suppress duplicates and increase confidence scores.</em>
 </div>
 
-The prediction examples below compared detection results for different model variants on a sample *BlackBear* image. In this case, the baseline YOLOv8n (top-left) produces duplicate bounding boxes with low confidence scores. After adding attention, or attention combined with the custom detection head, the duplicate boxes are removed and confidence scores increase. This highlights the effectiveness of combining attention with a specialized detection head.
+The prediction examples above compared detection results for different models on a sample *BlackBear* image. In this case, the baseline YOLOv8n (top-left) produces duplicate bounding boxes with low confidence scores. After adding attention, or attention combined with the custom detection head, the duplicate boxes are removed and confidence scores increase. This highlights the effectiveness of combining attention with an improved detection head.
 
 
 ## Project Poster
